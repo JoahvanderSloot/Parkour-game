@@ -25,6 +25,15 @@ namespace PlayerSystems.Modules.MovementModules {
         [SerializeField] float cooldownAfterStanceChange = 0.4f;
         [Space] 
         [SerializeField] LayerMask wallLayers;
+
+        [Header("Camera Tilt")]
+        [SerializeField] float cameraTiltZ = 15f;
+        [SerializeField] float tiltInResponse = 5f;
+        [SerializeField] float tiltOutResponse = 5f;
+        [Header("Camera Offset")]
+        [SerializeField] float cameraOffsetX = 0.2f;
+        [SerializeField] float cameraOffsetInResponse = 5f;
+        [SerializeField] float cameraOffsetOutResponse = 5f;
         
         float WallRunSpeed => Player.Movement.Speed * wallRunSpeedScale;
         
@@ -70,6 +79,12 @@ namespace PlayerSystems.Modules.MovementModules {
             Player.Movement.InvokeOnResetJumps();
             
             Player.Effects.CameraBob.Enable();
+            
+            var tiltZ = attachedWallRight ? cameraTiltZ : -cameraTiltZ;
+            Player.Effects.CameraTilt.SetTilt(new Vector3(0f, 0f, tiltZ), tiltInResponse);
+            
+            var offsetX = attachedWallRight ? -cameraOffsetX : cameraOffsetX;
+            Player.Effects.CameraOffset.SetOffset(new Vector3(offsetX, 0f, 0f), cameraOffsetInResponse);
         }
         public override void DisableModule() {
             base.DisableModule();
@@ -88,6 +103,9 @@ namespace PlayerSystems.Modules.MovementModules {
             Player.Movement.VelocityUpdate -= WallRun;
             
             Player.Effects.CameraBob.Disable();
+            
+            Player.Effects.CameraTilt.ResetTilt(tiltOutResponse);
+            Player.Effects.CameraOffset.ResetOffset(cameraOffsetOutResponse);
         }
         
         public override void ModuleUpdate() {

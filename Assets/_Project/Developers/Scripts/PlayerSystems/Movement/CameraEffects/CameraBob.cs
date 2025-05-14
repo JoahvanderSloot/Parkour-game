@@ -31,7 +31,7 @@ namespace PlayerSystems.Movement.CameraEffects {
         }
 
         public void UpdateBob(float deltaTime) {
-            Debug.Log($"Bob: Enabled: {IsEnabled}, LocalPos: {transform.localPosition}");
+            //Debug.Log($"Bob: Enabled: {IsEnabled}, LocalPos: {transform.localPosition}");
             
             if (!IsEnabled) {
                 var defaultPos = Vector3.Lerp(

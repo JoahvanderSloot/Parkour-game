@@ -31,6 +31,8 @@ namespace PlayerSystems.Modules {
         }
         // ReSharper disable Unity.PerformanceAnalysis
         public virtual void EnableModule() {
+            Debug.Log("Enabling module: " + GetType().Name);
+            
             if (Enabled) {
                 Debug.LogWarning($"Module {GetType().Name} is already enabled.");
             }
@@ -39,6 +41,8 @@ namespace PlayerSystems.Modules {
         }
         // ReSharper disable Unity.PerformanceAnalysis
         public virtual void DisableModule() {
+            Debug.Log("Disabling module: " + GetType().Name);
+            
             if (!Enabled) {
                 Debug.LogWarning($"Module {GetType().Name} is already disabled.");
                 return;

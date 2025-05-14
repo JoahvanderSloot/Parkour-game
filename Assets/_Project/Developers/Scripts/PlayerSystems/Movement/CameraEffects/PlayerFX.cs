@@ -3,15 +3,17 @@ using UnityEngine;
 namespace PlayerSystems.Movement.CameraEffects {
     public class PlayerFX : MonoBehaviour {
         //[SerializeField] private Volume volume;
-        [Space] [SerializeField] private CameraSpring cameraSpring;
-        [SerializeField] private CameraLean cameraLean;
+        [Space] [SerializeField] CameraSpring cameraSpring;
+        [SerializeField] CameraLean cameraLean;
 
-        [SerializeField] private CameraBob cameraBob;
+        [SerializeField] CameraBob cameraBob;
+        [SerializeField] CameraTilt cameraTilt;
+        [SerializeField] CameraOffset cameraOffset;
 
         // [SerializeField] private CameraSpring weaponCameraSpring;
         // [SerializeField] private CameraLean weaponCameraLean;
-        [SerializeField] private StanceVignette stanceVignette;
-        [SerializeField] private SpeedFOV speedFOV;
+        [SerializeField] StanceVignette stanceVignette;
+        [SerializeField] SpeedFOV speedFOV;
 
         //private PlayerMediator playerMediator;
         //[SerializeField] private VignetteSettings vignetteSettings;
@@ -24,6 +26,8 @@ namespace PlayerSystems.Movement.CameraEffects {
         public CameraSpring CameraSpring => cameraSpring;
         public CameraLean CameraLean => cameraLean;
         public CameraBob CameraBob => cameraBob;
+        public CameraTilt CameraTilt => cameraTilt;
+        public CameraOffset CameraOffset => cameraOffset;
 
         public void Initialize(PlayerController playerController, Camera camera) {
             player = playerController;
@@ -32,6 +36,8 @@ namespace PlayerSystems.Movement.CameraEffects {
             cameraSpring.Initialize();
             cameraLean.Initialize();
             cameraBob.Initialize();
+            cameraTilt.Initialize();
+            cameraOffset.Initialize();
 
             // Initialize effects
             // Vignette = VignetteEffect.CreateAndInitialize(vignetteSettings.Volume.profile);
@@ -51,6 +57,8 @@ namespace PlayerSystems.Movement.CameraEffects {
             cameraLean.UpdateLean(deltaTime, currentState.Stance is Stance.Slide, currentState.Velocity,
                 cameraTarget.up);
             cameraBob.UpdateBob(deltaTime);
+            cameraTilt.UpdateTilt(deltaTime);
+            cameraOffset.UpdateOffset(deltaTime);
             
             // weaponCameraSpring.UpdateSpring(deltaTime, cameraTarget.up);
             // weaponCameraLean.UpdateLean(deltaTime, currentState.Stance is Stance.Slide, currentState.Velocity, cameraTarget.up);

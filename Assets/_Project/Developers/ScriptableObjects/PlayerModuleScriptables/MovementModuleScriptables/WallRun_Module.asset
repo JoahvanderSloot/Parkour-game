@@ -28,3 +28,9 @@ MonoBehaviour:
   wallLayers:
     serializedVersion: 2
     m_Bits: 4294967295
+  cameraTiltZ: 25
+  tiltInResponse: 7.5
+  tiltOutResponse: 5
+  cameraOffsetX: 1
+  cameraOffsetInResponse: 5
+  cameraOffsetOutResponse: 10
