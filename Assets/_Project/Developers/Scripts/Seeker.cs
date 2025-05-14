@@ -3,6 +3,7 @@ using UnityEngine;
 public class Seeker : MonoBehaviour
 {
     [SerializeField] float speed;
+    [SerializeField] GameObject flashLight;
     float realSpeed;
     Transform player;
 
@@ -30,7 +31,11 @@ public class Seeker : MonoBehaviour
                 realSpeed = speed;
             }
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_targetPosition - transform.position), Time.deltaTime * 5f);
+            Vector3 _lookDirection = _targetPosition - transform.position;
+            Quaternion _targetRotation = Quaternion.LookRotation(_lookDirection);
+            flashLight.transform.rotation = Quaternion.Slerp(flashLight.transform.rotation, _targetRotation, Time.deltaTime * 5f);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_lookDirection), Time.deltaTime * 5f);
         }
     }
 }
