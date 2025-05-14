@@ -3,12 +3,11 @@ using UnityEngine;
 
 namespace PlayerSystems.Input
 { 
-    [Obsolete]
     public enum CrouchInput
     {
         None, Toggle, Held,// TODO Add Hold 
     }
-    [Obsolete]
+
     public struct MovementInput
     {
         public Quaternion Rotation;
@@ -17,7 +16,7 @@ namespace PlayerSystems.Input
         public bool JumpSustain;
         public CrouchInput Crouch;
     }
-    [Obsolete]
+
     public struct CombatInput
     {
         public bool EquipPrimary;
@@ -36,7 +35,7 @@ namespace PlayerSystems.Input
         
         public bool MovementAbility;
     }
-    [Obsolete]
+
     public struct CameraInput
     {
         public Vector2 Look;

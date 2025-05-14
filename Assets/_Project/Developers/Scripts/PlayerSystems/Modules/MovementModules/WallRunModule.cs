@@ -68,6 +68,8 @@ namespace PlayerSystems.Modules.MovementModules {
             Player.Movement.VelocityUpdate += WallRun;
             
             Player.Movement.InvokeOnResetJumps();
+            
+            Player.Effects.CameraBob.Enable();
         }
         public override void DisableModule() {
             base.DisableModule();
@@ -84,6 +86,8 @@ namespace PlayerSystems.Modules.MovementModules {
             
             Input.Jump -= OnJump;
             Player.Movement.VelocityUpdate -= WallRun;
+            
+            Player.Effects.CameraBob.Disable();
         }
         
         public override void ModuleUpdate() {

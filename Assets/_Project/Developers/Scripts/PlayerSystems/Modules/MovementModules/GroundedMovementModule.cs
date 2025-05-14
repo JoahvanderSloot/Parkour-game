@@ -29,16 +29,44 @@ namespace PlayerSystems.Modules.MovementModules {
             downwardVelocity = Mathf.Max(downwardVelocity, 0);
 
             Player.Movement.BaseModuleVelocityUpdate += Movement;
+            
+            Player.Effects.CameraBob.Enable();
         }
 
         public override void DisableModule() {
             base.DisableModule();
 
             Player.Movement.BaseModuleVelocityUpdate -= Movement;
+            
+            Player.Effects.CameraBob.Disable();
+        }
+
+        void UpdateCameraBobState(Stance stance, float velocity) {
+            var cameraBob = Player.Effects.CameraBob;
+            
+            switch (cameraBob.IsEnabled) {
+                case false when stance is Stance.Stand or Stance.Crouch:
+                    Player.Effects.CameraBob.Enable();
+                    break;
+                case true when stance is not Stance.Stand and not Stance.Crouch:
+                    Player.Effects.CameraBob.Disable();
+                    break;
+            }
+
+            switch (velocity) {
+                case <= 0.1f when cameraBob.IsEnabled:
+                    cameraBob.Disable();
+                    break;
+                case > 0.1f when !cameraBob.IsEnabled:
+                    cameraBob.Enable();
+                    break;
+            }
         }
 
         void Movement(ref Vector3 currentVelocity, float deltaTime) {
             var state = Player.Movement.GetState();
+            
+            UpdateCameraBobState(state.Stance, state.Velocity.magnitude);
             
             if (state.Stance is Stance.Slide)
                 return;

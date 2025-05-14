@@ -9,7 +9,7 @@ namespace PlayerSystems.Modules.MovementAbilityModules {
         [SerializeField] float dashSpeedScale = 2.65f; 
         [SerializeField] float maxDashSpeed = 50f;
         [Space]
-        [SerializeField] float smoothing = 0.33f;
+        //[SerializeField] float smoothing = 0.33f;
         [SerializeField] float dashDuration = 0.15f;
         [SerializeField, Range(0,1)] float retainedSpeed = 0.33f;
         

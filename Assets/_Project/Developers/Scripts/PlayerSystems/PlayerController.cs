@@ -24,9 +24,7 @@ namespace PlayerSystems {
         //[SerializeField] private PlayerWeaponManager playerWeaponManager;
         [FormerlySerializedAs("playerCameraEffects")] [SerializeField]
         private PlayerFX playerFX;
-
-        [SerializeField] private LayerMask lineOfSightBlockingLayerMask;
-        [SerializeField] private float interactionRange = 5f;
+        public PlayerFX Effects => playerFX;
 
         //private InteractionSystem.InteractionHandler interactionHandler;
         private PlayerInput oldInput;
@@ -54,7 +52,9 @@ namespace PlayerSystems {
         public Vector3 TransientBottomPosition => Motor.TransientPosition;
         public Vector3 TransientTopPosition => Motor.TransientPosition + Motor.CharacterUp * Height;
         
-        IDisposable eventSubscriptions;
+        void Awake() {
+            Initialize();
+        }
 
         public void Initialize() {
             Cursor.lockState = CursorLockMode.Locked;
@@ -63,7 +63,7 @@ namespace PlayerSystems {
             
             playerMovement.Initialize(this);
             playerCamera.Initialize(playerMovement.GetCameraTarget(), this);
-            playerFX.Initialize(playerMovement, mainCamera);
+            playerFX.Initialize(this, mainCamera);
 
             MainCamera.gameObject.SetActive(true);
             oldInput = PlayerInput.CreateAndInitialize(playerCamera.transform);
@@ -74,7 +74,6 @@ namespace PlayerSystems {
         void OnDestroy() {
             oldInput.Dispose();
             gameplayInputReader.Dispose();
-            eventSubscriptions.Dispose();
         }
 
         void Teleport(Vector3 position) {
