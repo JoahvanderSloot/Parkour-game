@@ -1,0 +1,253 @@
+﻿using System.Diagnostics;
+using ImprovedTimers;
+using PlayerSystems.Input;
+using PlayerSystems.Movement;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
+
+namespace PlayerSystems.Modules.MovementModules {
+    [CreateAssetMenu(fileName = "new WallRunModule", menuName = "Player/Modules/Movement/WallRun", order = 0)]
+    public class WallRunModule : MovementModule {
+        [SerializeField, Range(0, 2)] float wallRunSpeedScale = 1.25f;
+        [SerializeField] float wallRunResponse = 10f;
+        [SerializeField] float wallRunGravity = 1f;
+        [Space]
+        [SerializeField] float jumpOutForce = 10f;
+        [SerializeField] float jumpUpForce = 10f;
+        [Space]
+        [SerializeField] Vector2 minMaxBankAngle = new (75, 100);
+        [SerializeField] float wallCheckDistance = 1f;
+        [SerializeField, Range(0,1)] float wallCheckHeight = 0.25f;
+        [SerializeField] float minDistanceFromGround = 1f;
+        [Space]
+        [SerializeField] float cooldownAfterDetaching = 0.1f;
+        [SerializeField] float cooldownAfterJump = 0.2f;
+        [SerializeField] float cooldownAfterStanceChange = 0.4f;
+        [Space] 
+        [SerializeField] LayerMask wallLayers;
+        
+        float WallRunSpeed => Player.Movement.Speed * wallRunSpeedScale;
+        
+        bool wallRight;
+        bool wallLeft;
+        
+        RaycastHit rightWallHit;
+        RaycastHit leftWallHit;
+        
+        RaycastHit attachedWallHit;
+        bool attachedWallRight;
+        
+        CountdownTimer cooldownTimer;
+
+        bool previousWallRight;
+        
+        bool detachFromWall;
+        
+        bool jumpRequested;
+        
+        Vector3 WallCheckPosition => Player.Motor.TransientPosition + Player.Motor.CharacterUp * (Player.Height * wallCheckHeight);
+
+        protected override void Initialize() {
+            cooldownTimer = new CountdownTimer(cooldownAfterJump);
+        }
+
+        public override ModuleLevel ModuleLevel => ModuleLevel.AutomaticActivationModule;
+
+        public override bool ShouldActivate => ShouldAttachToWall();
+
+        public override void EnableModule() {
+            base.EnableModule();
+
+            detachFromWall = false;
+            Player.Movement.SetStance(Stance.Stand, forceStance: true);
+            Player.Movement.OnWall = true;
+            
+            jumpRequested = false;
+            
+            Input.Jump += OnJump;
+            Player.Movement.VelocityUpdate += WallRun;
+            
+            Player.Movement.InvokeOnResetJumps();
+        }
+        public override void DisableModule() {
+            base.DisableModule();
+            
+            if (!cooldownTimer.IsRunning) {
+                cooldownTimer.Reset(cooldownAfterDetaching);
+                cooldownTimer.Start();
+            }
+
+            Player.Movement.OnWall = false;
+            jumpRequested = false;
+            
+            previousWallRight = attachedWallRight;
+            
+            Input.Jump -= OnJump;
+            Player.Movement.VelocityUpdate -= WallRun;
+        }
+        
+        public override void ModuleUpdate() {
+
+        }
+        
+        void OnJump(ButtonPhase phase) {
+            if (phase == ButtonPhase.Pressed)
+                jumpRequested = true;
+        }
+
+        bool ShouldAttachToWall() {
+            if (!AboveGround())
+                return false;
+            
+            if (!CheckForWall())
+                return false;
+            
+            if (wallRight && StrafingTowardWall(rightWallHit))
+                SetAttachedWall(rightWallHit);
+            else if (wallLeft && StrafingTowardWall(leftWallHit))
+                SetAttachedWall(leftWallHit);
+            else
+                return false;
+            
+            if (cooldownTimer.IsRunning && attachedWallRight == previousWallRight)
+                return false;
+            
+            if (!IsValidWall(attachedWallHit))
+                return false;
+
+            return true;
+        }
+        
+        bool CheckForWall() {
+            wallRight = Physics.Raycast(WallCheckPosition, Player.Motor.CharacterRight, out rightWallHit, wallCheckDistance, wallLayers);
+            wallLeft = Physics.Raycast(WallCheckPosition, -Player.Motor.CharacterRight, out leftWallHit, wallCheckDistance, wallLayers);
+            
+            DrawDebugLines();
+            
+            return wallRight || wallLeft;
+        }
+        
+        
+        bool StrafingTowardWall(RaycastHit wallHit) {
+            var isRight = Vector3.Dot(Player.Motor.CharacterRight, wallHit.normal) < 0;
+            
+            switch (isRight) {
+                case true when Input.MoveInputDirection.x > 0:
+                    attachedWallRight = true;
+                    attachedWallHit = wallHit;
+                    return true;
+                case false when Input.MoveInputDirection.x < 0:
+                    attachedWallRight = false;
+                    attachedWallHit = wallHit;
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        
+        bool AboveGround() {
+            return !Physics.Raycast(Player.Motor.TransientPosition, -Player.Motor.CharacterUp, out RaycastHit hit, minDistanceFromGround);
+        }
+        
+        bool IsValidWall(RaycastHit wallHit) {
+            // Check bank angle
+            var angle = Vector3.Angle(Player.Motor.CharacterUp, wallHit.normal);
+            var angleIsValid = !(angle < minMaxBankAngle.x) && !(angle > minMaxBankAngle.y);
+            if (!angleIsValid)
+                return false;
+            
+            return true;
+        }
+
+        bool ShouldDetachFromWall() {
+            if (detachFromWall)
+                return true;
+
+            var lookingAway = attachedWallRight 
+                ? Vector3.Dot(Player.Motor.CharacterForward, -rightWallHit.normal) < -0.9f 
+                : Vector3.Dot(Player.Motor.CharacterForward, -leftWallHit.normal) < -0.9f;
+            if (lookingAway)
+                return true;
+            
+            var strafingAway = attachedWallRight 
+                ? Input.MoveInputDirection.x < 0 
+                : Input.MoveInputDirection.x > 0;
+            if (strafingAway)
+                return true;
+
+            var notPressingForward = Input.MoveInputDirection.y <= 0;
+            if (notPressingForward)
+                return true;
+            
+            var wrongStance = Player.Movement.GetState().Stance is not Stance.Stand;
+            if (wrongStance) {
+                cooldownTimer.Reset(cooldownAfterStanceChange);
+                cooldownTimer.Start();
+                return true;
+            }
+
+            if (!CheckForWall())
+                return true;
+            
+            if (!IsValidWall(attachedWallHit))
+                return true;
+            
+            return false;
+        }
+
+        void SetAttachedWall(RaycastHit wallHit) {
+            var isRight = Vector3.Dot(Player.Motor.CharacterRight, wallHit.normal) < 0;
+            
+            attachedWallRight = isRight;
+            attachedWallHit = wallHit;
+        }
+        
+        void WallRun(ref Vector3 currentVelocity, float deltaTime) {
+            Vector3 wallNormal = attachedWallHit.normal;
+            Vector3 wallForward = Vector3.Cross(wallNormal, Vector3.up);
+            
+            if ((Player.Motor.CharacterForward - wallForward).magnitude > (Player.Motor.CharacterForward - -wallForward).magnitude)
+                wallForward = -wallForward;
+            
+            currentVelocity = new Vector3(currentVelocity.x, 0, wallForward.z);
+            
+            var targetVelocity = wallForward * WallRunSpeed;
+            var moveVelocity = Vector3.Lerp(
+                a: currentVelocity,
+                b: targetVelocity,
+                t: 1f - Mathf.Exp(-wallRunResponse * deltaTime)
+            );
+            
+            currentVelocity = moveVelocity;
+            
+            // Pull player toward wall & apply gravity
+            currentVelocity += -wallNormal * (100 * deltaTime);
+            currentVelocity += Player.Motor.CharacterUp * (-wallRunGravity * deltaTime);
+            
+            if (jumpRequested)
+                JumpOut(ref currentVelocity);
+            
+            if (ShouldDetachFromWall()) {
+                DisableModule();
+            }
+        }
+        
+        void JumpOut(ref Vector3 currentVelocity) {
+            Vector3 forceToApply = attachedWallHit.normal * jumpOutForce + Player.Motor.CharacterUp * jumpUpForce;
+            currentVelocity += forceToApply;
+            
+            if (!cooldownTimer.IsRunning) {
+                cooldownTimer.Reset(cooldownAfterJump);
+                cooldownTimer.Start();
+            }
+            
+            detachFromWall = true;
+        }
+        
+        [Conditional("UNITY_EDITOR")]
+        void DrawDebugLines() {
+            Debug.DrawLine(WallCheckPosition, Player.Motor.CharacterRight * wallCheckDistance, Color.blue);
+            Debug.DrawLine(WallCheckPosition, -Player.Motor.CharacterRight * wallCheckDistance, Color.blue);
+        }
+    }
+}
