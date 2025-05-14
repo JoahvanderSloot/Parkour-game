@@ -51,6 +51,8 @@ public class Seeker : MonoBehaviour
                 flashLight.transform.rotation = Quaternion.Lerp(flashLight.transform.rotation, targetRotation, Time.deltaTime * 5f);
             }
 
+            transform.position = new Vector3(transform.position.x, player.position.y + 5, transform.position.z);
+
             KillPlayer();
         }
     }
