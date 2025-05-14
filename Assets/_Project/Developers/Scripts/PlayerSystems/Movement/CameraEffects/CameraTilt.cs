@@ -18,19 +18,16 @@ namespace PlayerSystems.Movement.CameraEffects {
                 : defaultTiltResponse;
         
         public void ResetTilt(float response = 0f) {
-            Debug.Log("Reset Tilt: " + response);
             SetResponse(response);
             GoalTilt = Vector3.zero;
         }
         
         public void SetTilt(Vector3 newTilt, float response = 0f) {
-            Debug.Log("Set Tilt: " + newTilt);
             SetResponse(response);
             GoalTilt = newTilt;
         }
         
         public void UpdateTilt(float deltaTime) {
-            
             CurrentTilt = Vector3.Lerp(
                 CurrentTilt,
                 GoalTilt, 
@@ -38,7 +35,6 @@ namespace PlayerSystems.Movement.CameraEffects {
             );
             
             transform.localRotation = Quaternion.Euler(CurrentTilt);
-            Debug.Log($"Current Tilt: {CurrentTilt}, Goal Tilt: {GoalTilt}, Local Rotation: {transform.localRotation}");
         }
     }
 }

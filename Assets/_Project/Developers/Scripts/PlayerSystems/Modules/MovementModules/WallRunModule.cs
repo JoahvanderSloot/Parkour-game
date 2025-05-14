@@ -123,6 +123,10 @@ namespace PlayerSystems.Modules.MovementModules {
             
             if (!CheckForWall())
                 return false;
+
+            var notPressingForward = Input.MoveInputDirection.y <= 0;
+            if (notPressingForward)
+                return false;
             
             if (wallRight && StrafingTowardWall(rightWallHit))
                 SetAttachedWall(rightWallHit);
@@ -136,7 +140,7 @@ namespace PlayerSystems.Modules.MovementModules {
             
             if (!IsValidWall(attachedWallHit))
                 return false;
-
+            
             return true;
         }
         
@@ -208,6 +212,9 @@ namespace PlayerSystems.Modules.MovementModules {
                 return true;
             }
 
+            if (Player.Movement.GetState().Velocity.magnitude < 0.1f)
+                return true;
+
             if (!CheckForWall())
                 return true;
             
@@ -231,7 +238,10 @@ namespace PlayerSystems.Modules.MovementModules {
             if ((Player.Motor.CharacterForward - wallForward).magnitude > (Player.Motor.CharacterForward - -wallForward).magnitude)
                 wallForward = -wallForward;
             
-            currentVelocity = new Vector3(currentVelocity.x, 0, wallForward.z);
+            var gravity = wallRunGravity * deltaTime;
+            var newVerticalVelocity = Mathf.Max(currentVelocity.y, 0f) + gravity;
+            
+            currentVelocity = new Vector3(currentVelocity.x, 0f, wallForward.z);
             
             var targetVelocity = wallForward * WallRunSpeed;
             var moveVelocity = Vector3.Lerp(
@@ -240,11 +250,11 @@ namespace PlayerSystems.Modules.MovementModules {
                 t: 1f - Mathf.Exp(-wallRunResponse * deltaTime)
             );
             
-            currentVelocity = moveVelocity;
+            currentVelocity = moveVelocity + Player.Motor.CharacterUp * newVerticalVelocity;
             
             // Pull player toward wall & apply gravity
             currentVelocity += -wallNormal * (100 * deltaTime);
-            currentVelocity += Player.Motor.CharacterUp * (-wallRunGravity * deltaTime);
+            //currentVelocity += Player.Motor.CharacterUp * (gravity * deltaTime);
             
             if (jumpRequested)
                 JumpOut(ref currentVelocity);
