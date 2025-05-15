@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669f81a639ff473d94b2ba30585c3665, type: 3}
+  m_Name: WallRun_Module
+  m_EditorClassIdentifier: 
+  CannotOverride: []
+  wallRunSpeedScale: 1.25
+  wallRunResponse: 100
+  wallRunGravity: 1
+  jumpOutForce: 10
+  jumpUpForce: 10
+  minMaxBankAngle: {x: 75, y: 100}
+  wallCheckDistance: 1
+  wallCheckHeight: 0.25
+  minDistanceFromGround: 1
+  cooldownAfterDetaching: 0.1
+  cooldownAfterJump: 0.2
+  cooldownAfterStanceChange: 0.4
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  cameraTiltZ: 25
+  tiltInResponse: 7.5
+  tiltOutResponse: 5
+  cameraOffsetX: 1
+  cameraOffsetInResponse: 5
+  cameraOffsetOutResponse: 10
