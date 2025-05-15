@@ -16,7 +16,7 @@ MonoBehaviour:
   wallRunSpeedScale: 1.25
   wallRunResponse: 100
   wallRunGravity: 1
-  jumpOutForce: 10
+  jumpOutForce: 15
   jumpUpForce: 10
   minMaxBankAngle: {x: 75, y: 100}
   wallCheckDistance: 1

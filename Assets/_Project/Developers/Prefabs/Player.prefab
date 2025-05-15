@@ -813,6 +813,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f81f4878d018adc429b40e58f1633391, type: 2}
   - {fileID: 11400000, guid: f86b4776c2001994a907645f19c141c1, type: 2}
   - {fileID: 11400000, guid: 589d5d3c667ac974aa399f1c47f6e317, type: 2}
+  - {fileID: 11400000, guid: d5e55f42fae4ad8459e167747e1d5a2c, type: 2}
   effectModules: []
   movementAbilityModule: {fileID: 11400000, guid: 24feeae9a497682439254a910d34d50e, type: 2}
   ultimateAbilityModule: {fileID: 0}
