@@ -61,7 +61,8 @@ namespace PlayerSystems.EnvironmentalObjects {
                 QueryTriggerInteraction.Collide
             );
 
-            return gotHit && latestHit.collider.CompareTag("RopePart");
+            // ReSharper disable once Unity.UnknownTag
+            return gotHit && latestHit.collider.CompareTag(Rope.c_RopePartTag);
         }
         
         bool TryingToGrabRope() {

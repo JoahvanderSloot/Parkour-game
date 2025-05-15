@@ -44,13 +44,6 @@ namespace PlayerSystems.EnvironmentalObjects {
             }
         }
         
-        public void OnTriggerEnter(Collider other) {
-            if (other.CompareTag("Player")) {
-                // Handle player interaction with the rope part
-                Debug.Log($"Player entered rope part {Index}");
-            }
-        }
-        
         public void AddForce(Vector3 force, int updateSpread = 5) {
             forcesToApply.Add((force, updateSpread, 0));
         }

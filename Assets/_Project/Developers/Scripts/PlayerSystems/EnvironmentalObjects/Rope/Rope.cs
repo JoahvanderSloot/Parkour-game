@@ -6,8 +6,10 @@ using UnityEngine.InputSystem;
 
 namespace PlayerSystems.EnvironmentalObjects {
     [RequireComponent(typeof(LineRenderer))]
-    [ExecuteInEditMode]
+    [ExecuteAlways]
     public class Rope : MonoBehaviour {
+        public const string c_RopePartTag = "RopePart";
+        
         [SerializeField] Transform startPointTransform;
         [SerializeField] RopeConfig ropeConfig = RopeConfig.DefaultConfig();
         [Space]
@@ -45,7 +47,7 @@ namespace PlayerSystems.EnvironmentalObjects {
                     transform = {
                         parent = transform
                     },
-                    tag = "RopePart"
+                    tag = c_RopePartTag
                 };
                 
                 var ropePart = colliderObject.AddComponent<RopePart>();
@@ -68,8 +70,6 @@ namespace PlayerSystems.EnvironmentalObjects {
         }
 
         void DestroyRopeParts() {
-            Debug.Log("Destroying colliders");
-            
             foreach (var ropePart in ropeParts.ToList()) {
                 if (ropePart == null)
                     continue;
@@ -86,24 +86,18 @@ namespace PlayerSystems.EnvironmentalObjects {
             ropeParts = null;
         }
         
+#if UNITY_EDITOR
         void Update() {
-            if (Keyboard.current.kKey.isPressed) {
-                ropeVerlet.ApplyForceToSegment(23, Vector3.forward * 0.1f);
-            }
+            if (Application.isPlaying)
+                return;
             
-            if (Keyboard.current.lKey.isPressed) {
-                ropeVerlet.SetSegmentPosition(23, segmentPositions[23] + Vector3.forward * 0.1f);
-            }
+            var ropeValid = ValidatePosition() && ValidateConfig();
+            if (ropeValid)
+                return;
             
-// #if UNITY_EDITOR
-//             if (Application.isPlaying)
-// #endif
-//                 //DrawRope();
-// #if UNITY_EDITOR
-//             else
-//                 DrawRopeInEditor();
-// #endif
+            DrawRopeInEditor();
         }
+#endif
         
         void FixedUpdate() {
             ropeVerlet.SetStartPoint(startPointTransform.position);
@@ -122,42 +116,54 @@ namespace PlayerSystems.EnvironmentalObjects {
         }
 
         void OnDestroy() {
-            Debug.Log("Destroyed");
             DestroyRopeParts();
         }
 
 #if UNITY_EDITOR
         
         RopeConfig previousConfig = RopeConfig.DefaultConfig();
+        Vector3 previousPosition;
         
         void OnValidate() {
             lineRenderer ??= GetComponent<LineRenderer>();
             startPointTransform ??= transform;
             
             lineRenderer.widthMultiplier = ropeConfig.width;
+
+            var ropeValid = ValidatePosition() && ValidateConfig();
             
-            if (previousConfig == ropeConfig)
+            if (ropeValid)
                 return;
             
-            previousConfig = ropeConfig;
-            
-            if (Application.isPlaying) {
+            if (Application.isPlaying)
                 CreateRope();
-            }
             else
                 DrawRopeInEditor();
         }
 
+        bool ValidatePosition() {
+            var valid= previousPosition == transform.position;
+            previousPosition = transform.position;
+            return valid;
+        }
+
+        bool ValidateConfig() {
+            var valid = previousConfig == ropeConfig;
+            previousConfig = ropeConfig;
+            return valid;
+        }
+
         void DrawRopeInEditor() {
-            lineRenderer.positionCount = 2;
+            var count = ropeConfig.segmentCount;
+            var segmentLength = ropeConfig.segmentLength;
+            
+            lineRenderer.positionCount = count;
             lineRenderer.widthMultiplier = ropeConfig.width;
-            
-            var length = ropeConfig.segmentLength * ropeConfig.segmentCount;
-            var startPosition = startPointTransform.position;
-            var endPosition = startPointTransform.position - startPointTransform.up * length;
-            
-            lineRenderer.SetPosition(0, startPosition);
-            lineRenderer.SetPosition(1, endPosition);
+
+            for (var i = 0; i < count; i++) {
+                var pos = startPointTransform.position + Vector3.down * (i * segmentLength);
+                lineRenderer.SetPosition(i, pos);
+            }
         }
         
 #endif
