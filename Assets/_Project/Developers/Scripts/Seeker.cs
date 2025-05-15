@@ -1,4 +1,5 @@
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Seeker : MonoBehaviour
@@ -8,6 +9,9 @@ public class Seeker : MonoBehaviour
     [SerializeField] float detectionRange;
     float realSpeed;
     Transform player;
+    [SerializeField] LayerMask obstacleMask;
+    [SerializeField] float sidestepSpeed;
+    [SerializeField] float sidestepDistance;
 
     private void Start()
     {
@@ -54,6 +58,7 @@ public class Seeker : MonoBehaviour
             transform.position = new Vector3(transform.position.x, player.position.y + 5, transform.position.z);
 
             KillPlayer();
+            AvoidBuildings();
         }
     }
 
@@ -83,4 +88,32 @@ public class Seeker : MonoBehaviour
             }
         }
     }
+
+    private void AvoidBuildings()
+    {
+        Vector3 _directionToPlayer = (player.position - transform.position).normalized;
+        _directionToPlayer.y = 0;
+
+        if (Physics.Raycast(transform.position, _directionToPlayer, out RaycastHit hit, detectionRange, obstacleMask))
+        {
+            Vector3 _rightStep = Vector3.Cross(Vector3.up, _directionToPlayer) * sidestepDistance;
+            Vector3 _rightCheck = transform.position + _rightStep;
+
+            if (!Physics.Raycast(_rightCheck, _directionToPlayer, detectionRange, obstacleMask))
+            {
+                transform.position = Vector3.MoveTowards(transform.position, transform.position + _rightStep, sidestepSpeed * Time.deltaTime);
+            }
+            else
+            {
+                Vector3 _leftStep = -_rightStep;
+                Vector3 _leftCheck = transform.position + _leftStep;
+
+                if (!Physics.Raycast(_leftCheck, _directionToPlayer, detectionRange, obstacleMask))
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, transform.position + _leftStep, sidestepSpeed * Time.deltaTime);
+                }
+            }
+        }
+    }
+
 }

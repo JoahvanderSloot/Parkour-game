@@ -1,9 +1,10 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
 {
-    [SerializeField] Settings settings;
+    [SerializeField] GameManager gameManager;
 
     HitPoints hitPoints;
     [SerializeField] Image damageFlashImage;
@@ -12,17 +13,19 @@ public class UiManager : MonoBehaviour
     [SerializeField] Image crosshair;
 
     [SerializeField] GameObject EscMenu;
+    [SerializeField] TextMeshProUGUI timerText;
 
     private void Start()
     {
         hitPoints = GameObject.FindWithTag("Player").GetComponentInParent<HitPoints>();
-        crosshair.sprite = settings.Crosshairs[settings.CrosshairIndex];
-        crosshair.color = settings.crosshairColor;
+        crosshair.sprite = gameManager.settings.Crosshairs[gameManager.settings.CrosshairIndex];
+        crosshair.color = gameManager.settings.crosshairColor;
     }
 
     private void Update()
     {
-        EscMenu.SetActive(settings.Paused);
+        EscMenu.SetActive(gameManager.settings.Paused);
+        timerText.text = gameManager.gameTime.ToString("0.00");
 
         if (hitPoints != null)
         {
