@@ -61,13 +61,25 @@ public class Seeker : MonoBehaviour
     {
         RaycastHit _hit;
         Vector3 _raycastOrigin = transform.position;
-        _raycastOrigin.y = player.position.y;
 
+        Debug.DrawRay(_raycastOrigin, (player.position - _raycastOrigin).normalized * detectionRange, Color.red, 0.1f, false);
         if (Physics.Raycast(_raycastOrigin, (player.position - _raycastOrigin).normalized, out _hit, detectionRange))
         {
             if (_hit.collider.CompareTag("Player"))
             {
-                Debug.Log("Player hit by raycast!");
+                HitPoints _hitPoints = _hit.collider.gameObject.GetComponentInParent<HitPoints>();
+                if (_hitPoints != null)
+                {
+                    _hitPoints.IsHit = true;
+                }
+            }
+        }
+        else
+        {
+            HitPoints _hitPoints = player.GetComponentInParent<HitPoints>();
+            if (_hitPoints != null)
+            {
+                _hitPoints.IsHit = false;
             }
         }
     }
