@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections;
+using System.Diagnostics;
 using ImprovedTimers;
 using PlayerSystems.Input;
 using PlayerSystems.Movement;
@@ -14,6 +16,7 @@ namespace PlayerSystems.Modules.MovementModules {
         [Space]
         [SerializeField] float jumpOutForce = 10f;
         [SerializeField] float jumpUpForce = 10f;
+        [SerializeField] float coyoteTime = 0.2f;
         [Space]
         [SerializeField] Vector2 minMaxBankAngle = new (75, 100);
         [SerializeField] float wallCheckDistance = 1f;
@@ -47,6 +50,7 @@ namespace PlayerSystems.Modules.MovementModules {
         bool attachedWallRight;
         
         CountdownTimer cooldownTimer;
+        CountdownTimer jumpBufferTimer;
 
         bool previousWallRight;
         
@@ -58,6 +62,7 @@ namespace PlayerSystems.Modules.MovementModules {
 
         protected override void Initialize() {
             cooldownTimer = new CountdownTimer(cooldownAfterJump);
+            jumpBufferTimer = new CountdownTimer(coyoteTime);
         }
 
         public override ModuleLevel ModuleLevel => ModuleLevel.AutomaticActivationModule;
@@ -93,17 +98,36 @@ namespace PlayerSystems.Modules.MovementModules {
                 cooldownTimer.Reset(cooldownAfterDetaching);
                 cooldownTimer.Start();
             }
-
-            Player.Movement.OnWall = false;
-            jumpRequested = false;
             
+            Player.Movement.OnWall = false;
             previousWallRight = attachedWallRight;
+            jumpRequested = false;
             
             Input.Jump -= OnJump;
             Player.Movement.VelocityUpdate -= WallRun;
+            Player.Movement.LateVelocityUpdate -= BufferJump;
             
             Player.Effects.CameraBob.Disable();
+            Player.Effects.CameraTilt.ResetTilt(tiltOutResponse);
+            Player.Effects.CameraOffset.ResetOffset(cameraOffsetOutResponse);
+        }
+
+        void DetachFromWall() {
+            if (!cooldownTimer.IsRunning) {
+                cooldownTimer.Reset(cooldownAfterDetaching);
+                cooldownTimer.Start();
+            }
             
+            jumpBufferTimer.Reset(coyoteTime);
+            jumpBufferTimer.Start();
+
+            Player.Movement.OnWall = false;
+            previousWallRight = attachedWallRight;
+            
+            Player.Movement.VelocityUpdate -= WallRun;
+            Player.Movement.LateVelocityUpdate += BufferJump;
+
+            Player.Effects.CameraBob.Disable();
             Player.Effects.CameraTilt.ResetTilt(tiltOutResponse);
             Player.Effects.CameraOffset.ResetOffset(cameraOffsetOutResponse);
         }
@@ -256,24 +280,39 @@ namespace PlayerSystems.Modules.MovementModules {
             currentVelocity += -wallNormal * (100 * deltaTime);
             //currentVelocity += Player.Motor.CharacterUp * (gravity * deltaTime);
             
-            if (jumpRequested)
+            if (jumpRequested) {
                 JumpOut(ref currentVelocity);
-            
-            if (ShouldDetachFromWall()) {
                 DisableModule();
             }
+            
+            if (ShouldDetachFromWall()) {
+                DetachFromWall();
+            }
+        }
+
+        void BufferJump(ref Vector3 currentVelocity, float deltaTime) {
+            if (jumpBufferTimer.IsFinished)
+                DisableModule();
+            
+            if (!jumpRequested)
+                return;
+            
+            jumpRequested = false;
+            JumpOut(ref currentVelocity);
+            DisableModule();
         }
         
         void JumpOut(ref Vector3 currentVelocity) {
+            Debug.Log("Jumping out of wall run");
+            
             Vector3 forceToApply = attachedWallHit.normal * jumpOutForce + Player.Motor.CharacterUp * jumpUpForce;
             currentVelocity += forceToApply;
             
-            if (!cooldownTimer.IsRunning) {
-                cooldownTimer.Reset(cooldownAfterJump);
-                cooldownTimer.Start();
-            }
+            cooldownTimer.Reset(cooldownAfterJump);
+            cooldownTimer.Start();
             
             detachFromWall = true;
+            jumpRequested = false;
         }
         
         [Conditional("UNITY_EDITOR")]

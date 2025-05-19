@@ -35,7 +35,7 @@ namespace PlayerSystems.Modules.MovementModules {
         }
         
         void HandleJumpInput(ButtonPhase phase) {
-            if (Player.Movement.OnWall)
+            if (Player.Movement.OnWall) // TODO: this shit is stupid just use override restrictions
                 return;
             
             if (phase == ButtonPhase.Pressed) {
