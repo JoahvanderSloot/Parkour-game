@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75b16c379bf3492e9021bf49295b5081, type: 3}
   m_Name: Jump_Module
   m_EditorClassIdentifier: 
-  CannotOverride: []
+  CannotOverride:
+  - {fileID: 11400000, guid: d5e55f42fae4ad8459e167747e1d5a2c, type: 2}
   jumpStrength: 10
   coyoteTime: 0.15
   jumpBuffer: 0.15

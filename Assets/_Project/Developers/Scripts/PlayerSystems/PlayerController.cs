@@ -11,6 +11,8 @@ using PlayerInput = PlayerSystems.Input.PlayerInput;
 
 namespace PlayerSystems {
     public class PlayerController : MonoBehaviour {
+        public static PlayerController s_ActivePlayer;
+        
         [SerializeField] private Transform playerHeadTransform;
 
         [SerializeField] private PlayerMovement playerMovement;
@@ -52,7 +54,7 @@ namespace PlayerSystems {
         public Vector3 TransientBottomPosition => Motor.TransientPosition;
         public Vector3 TransientTopPosition => Motor.TransientPosition + Motor.CharacterUp * Height;
         
-        void Awake() {
+        void Start() {
             Initialize();
         }
 
@@ -69,6 +71,8 @@ namespace PlayerSystems {
             oldInput = PlayerInput.CreateAndInitialize(playerCamera.transform);
 
             playerModules.InitializeModules(this);
+            
+            s_ActivePlayer = this;
         }
 
         void OnDestroy() {
