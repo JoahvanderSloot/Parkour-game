@@ -2,7 +2,6 @@
 using System.Linq;
 using KinematicCharacterController;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace PlayerSystems.EnvironmentalObjects {
     [RequireComponent(typeof(LineRenderer))]
