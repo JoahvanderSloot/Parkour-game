@@ -23,8 +23,11 @@ namespace PlayerSystems.EnvironmentalObjects {
         public float BounceFactor => config.bounceFactor;
         public float Damping => config.damping;
         
-        public Vector3 Gravity => config.gravityForce;
-        
+        Vector3 externallySetGravity = Vector3.zero;
+        public Vector3 Gravity => externallySetGravity == Vector3.zero
+                ? config.gravityForce
+                : externallySetGravity;
+
         public int PhysicsIterations => config.physicsIterations;
         public int CollisionIterationInterval => config.collisionIterationInterval;
         
@@ -46,6 +49,15 @@ namespace PlayerSystems.EnvironmentalObjects {
             for (int i = 0; i < SegmentCount; i++) {
                 forceToAdd[i] = Vector3.zero;
             }
+        }
+
+        public void SetGravityDirection(Vector3 gravityDirection) {
+            var normalizedDirection = gravityDirection.normalized;
+            externallySetGravity = normalizedDirection * config.gravityForce.magnitude;
+        }
+        
+        public void ResetGravity() {
+            externallySetGravity = Vector3.zero;
         }
 
         public void SetStartPoint(Vector3 startPoint) => StartPoint = startPoint;

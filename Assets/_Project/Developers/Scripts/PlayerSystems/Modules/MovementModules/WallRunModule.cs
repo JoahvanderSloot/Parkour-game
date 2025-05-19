@@ -257,7 +257,7 @@ namespace PlayerSystems.Modules.MovementModules {
         
         void WallRun(ref Vector3 currentVelocity, float deltaTime) {
             Vector3 wallNormal = attachedWallHit.normal;
-            Vector3 wallForward = Vector3.Cross(wallNormal, Vector3.up);
+            Vector3 wallForward = Vector3.Cross(wallNormal, Player.Motor.CharacterUp);
             
             if ((Player.Motor.CharacterForward - wallForward).magnitude > (Player.Motor.CharacterForward - -wallForward).magnitude)
                 wallForward = -wallForward;
@@ -303,8 +303,6 @@ namespace PlayerSystems.Modules.MovementModules {
         }
         
         void JumpOut(ref Vector3 currentVelocity) {
-            Debug.Log("Jumping out of wall run");
-            
             Vector3 forceToApply = attachedWallHit.normal * jumpOutForce + Player.Motor.CharacterUp * jumpUpForce;
             currentVelocity += forceToApply;
             

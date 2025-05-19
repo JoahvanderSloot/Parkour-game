@@ -128,6 +128,7 @@ namespace PlayerSystems.EnvironmentalObjects {
         
         void DetachFromRope() {
             attached = false;
+            ropePart.RopeVerlet.ResetGravity();
             DisableModule();
         }
 
@@ -155,6 +156,8 @@ namespace PlayerSystems.EnvironmentalObjects {
                 JumpOffRope(ref currentVelocity);
                 return;
             }
+            
+            ropePart.RopeVerlet.SetGravityDirection(-Player.Motor.CharacterUp);
             
             var currentSpeed = currentVelocity.magnitude;
             var ropeVelocity = ropePart.Velocity;
