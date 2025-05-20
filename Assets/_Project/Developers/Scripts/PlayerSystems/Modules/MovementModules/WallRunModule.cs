@@ -66,6 +66,7 @@ namespace PlayerSystems.Modules.MovementModules {
         }
 
         public override ModuleLevel ModuleLevel => ModuleLevel.AutomaticActivationModule;
+        public override bool AllowBaseModuleActivation => true;
 
         public override bool ShouldActivate => ShouldAttachToWall();
 

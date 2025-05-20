@@ -37,6 +37,7 @@ namespace PlayerSystems.Modules {
         // Interface implementation
 
         public abstract ModuleLevel ModuleLevel { get; }
+        public virtual bool AllowBaseModuleActivation => false;
         public bool Enabled { get; private set; }
         public PlayerController Player { get; private set; }
         public bool CannotBeOverridden { get; protected set; }

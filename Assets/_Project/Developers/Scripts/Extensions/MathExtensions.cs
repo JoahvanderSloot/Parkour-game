@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace Extensions {
-    public static class MathExtension {
+    public static class MathExtensions {
         public static float Map(this float value, float fromMin, float fromMax, float toMin, float toMax) {
             return (value - fromMin) / (fromMax - fromMin) * (toMax - toMin) + toMin;
         }

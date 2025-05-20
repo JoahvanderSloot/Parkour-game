@@ -94,6 +94,8 @@ namespace PlayerSystems.EnvironmentalObjects {
         public override void EnableModule() {
             base.EnableModule();
             
+            Player.Motor.SetGroundSolvingActivation(false);
+            
             if (!latestHit.collider.TryGetComponent(out ropePart)) {
                 Debug.LogError("No rope part found");
                 DisableModule();
@@ -109,6 +111,8 @@ namespace PlayerSystems.EnvironmentalObjects {
         
         public override void DisableModule() {
             base.DisableModule();
+            
+            Player.Motor.SetGroundSolvingActivation(true);
             
             Player.Movement.VelocityUpdate -= MoveOnRope;
             

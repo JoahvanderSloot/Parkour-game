@@ -18,9 +18,12 @@ MonoBehaviour:
   ropeLayerMask:
     serializedVersion: 2
     m_Bits: 1
+  verticalJumpStrength: 10
+  horizontalJumpStrength: 5
   initialForceMultiplier: 0.5
   acceleration: 0.025
   accelerationFactor: 0.25
   minimumAcceleration: 0.1
   maximumAcceleration: 1
   forceUpdateSpread: 2
+  ropeClingResponse: 10
