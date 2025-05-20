@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,11 +6,13 @@ public class GameManager : MonoBehaviour
 {
     public Settings settings;
     public float gameTime;
+    [SerializeField] List<CheckPoint> checkPoints;
 
     private void Start()
     {
         settings.Paused = false;
         gameTime = settings.GameTimer;
+        checkPoints[Random.Range(0, checkPoints.Count)].isActive = true;
     }
 
     private void Update()
@@ -26,6 +29,7 @@ public class GameManager : MonoBehaviour
         if (!settings.Paused)
         {
             GameTime();
+            CheckpointHandeling();
         }
     }
 
@@ -37,4 +41,30 @@ public class GameManager : MonoBehaviour
             Debug.Log("Game Over");
         }
     }
+
+    private void CheckpointHandeling()
+    {
+        CheckPoint _completedCheckpoint = null;
+
+        foreach (CheckPoint _checkP in checkPoints)
+        {
+            if (_checkP.isActive && _checkP.isPlayerInTrigger)
+            {
+                _checkP.isActive = false;
+                _checkP.isPlayerInTrigger = false;
+                _completedCheckpoint = _checkP;
+                break;
+            }
+        }
+
+        if (_completedCheckpoint != null)
+        {
+            checkPoints.Remove(_completedCheckpoint);
+
+            checkPoints[Random.Range(0, checkPoints.Count)].isActive = true;
+
+            checkPoints.Add(_completedCheckpoint);
+        }
+    }
+
 }
