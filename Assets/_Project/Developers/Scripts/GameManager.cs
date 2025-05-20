@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         settings.Paused = false;
+        settings.Score = 0;
         gameTime = settings.GameTimer;
         checkPoints[Random.Range(0, checkPoints.Count)].isActive = true;
     }
@@ -38,6 +39,10 @@ public class GameManager : MonoBehaviour
         gameTime -= Time.deltaTime;
         if (gameTime <= 0)
         {
+            if(settings.Score > settings.Highscore)
+            {
+                settings.Highscore = settings.Score;
+            }
             Debug.Log("Game Over");
         }
     }
@@ -52,6 +57,7 @@ public class GameManager : MonoBehaviour
             {
                 _checkP.isActive = false;
                 _checkP.isPlayerInTrigger = false;
+                settings.Score++;
                 _completedCheckpoint = _checkP;
                 break;
             }

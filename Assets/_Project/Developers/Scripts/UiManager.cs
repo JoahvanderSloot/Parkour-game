@@ -14,6 +14,7 @@ public class UiManager : MonoBehaviour
 
     [SerializeField] GameObject EscMenu;
     [SerializeField] TextMeshProUGUI timerText;
+    [SerializeField] TextMeshProUGUI scoreText;
 
     private void Start()
     {
@@ -26,6 +27,7 @@ public class UiManager : MonoBehaviour
     {
         EscMenu.SetActive(gameManager.settings.Paused);
         timerText.text = gameManager.gameTime.ToString("0.00");
+        scoreText.text = "[" + gameManager.settings.Score.ToString() + "]";
 
         if (hitPoints != null)
         {
