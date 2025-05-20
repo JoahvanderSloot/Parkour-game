@@ -18,6 +18,7 @@ MonoBehaviour:
   wallRunGravity: 1
   jumpOutForce: 15
   jumpUpForce: 10
+  coyoteTime: 0.2
   minMaxBankAngle: {x: 75, y: 100}
   wallCheckDistance: 1
   wallCheckHeight: 0.25

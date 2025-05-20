@@ -12,7 +12,8 @@ namespace PlayerSystems.EnvironmentalObjects {
         [SerializeField] float ropeCheckRadius = 0.5f;
         [SerializeField] LayerMask ropeLayerMask;
         [Space]
-        [SerializeField] float jumpStrength = 10f;
+        [SerializeField] float verticalJumpStrength = 10f;
+        [SerializeField] float horizontalJumpStrength = 5f;
         [Space]
         [SerializeField] float initialForceMultiplier = 0.5f;
         [SerializeField] float acceleration = 0.5f;
@@ -127,6 +128,7 @@ namespace PlayerSystems.EnvironmentalObjects {
         
         void DetachFromRope() {
             attached = false;
+            ropePart.RopeVerlet.ResetGravity();
             DisableModule();
         }
 
@@ -137,9 +139,13 @@ namespace PlayerSystems.EnvironmentalObjects {
             
             // Set minimum vertical speed to jump speed
             var currentVerticalSpeed = Vector3.Dot(currentVelocity, Player.Motor.CharacterUp);
-            var targetVerticalSpeed = Mathf.Max(currentVerticalSpeed, jumpStrength);
+            var targetVerticalSpeed = Mathf.Max(currentVerticalSpeed, verticalJumpStrength);
+            var horizontalForce = RequestedMovement * horizontalJumpStrength;
+            
             // Add jump speed to the velocity
-            currentVelocity += Player.Motor.CharacterUp * (targetVerticalSpeed - currentVerticalSpeed);
+            var forceToAdd = Player.Motor.CharacterUp * (targetVerticalSpeed - currentVerticalSpeed) + horizontalForce;
+            
+            currentVelocity += forceToAdd;
         }
         
         public void MoveOnRope(ref Vector3 currentVelocity, float deltaTime) {
@@ -150,6 +156,8 @@ namespace PlayerSystems.EnvironmentalObjects {
                 JumpOffRope(ref currentVelocity);
                 return;
             }
+            
+            ropePart.RopeVerlet.SetGravityDirection(-Player.Motor.CharacterUp);
             
             var currentSpeed = currentVelocity.magnitude;
             var ropeVelocity = ropePart.Velocity;

@@ -1,9 +1,9 @@
 {
   "dependencies": {
-    "com.unity.2d.sprite": {
-      "version": "1.0.0",
+    "com.kyrylokuzyk.primetween": {
+      "version": "file:../Assets/Plugins/PrimeTween/internal/com.kyrylokuzyk.primetween.tgz",
       "depth": 0,
-      "source": "builtin",
+      "source": "local-tarball",
       "dependencies": {}
     },
     "com.unity.ai.navigation": {
@@ -52,7 +52,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.31",
+      "version": "3.0.36",
       "depth": 0,
       "source": "registry",
       "dependencies": {

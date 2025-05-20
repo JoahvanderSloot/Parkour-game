@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CannotOverride:
   - {fileID: 11400000, guid: d5e55f42fae4ad8459e167747e1d5a2c, type: 2}
+  - {fileID: 11400000, guid: 589d5d3c667ac974aa399f1c47f6e317, type: 2}
   jumpStrength: 10
   coyoteTime: 0.15
   jumpBuffer: 0.15
