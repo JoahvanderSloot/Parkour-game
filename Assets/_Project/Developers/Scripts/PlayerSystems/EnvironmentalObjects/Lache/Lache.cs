@@ -14,10 +14,10 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
             gameObject.tag = c_LacheTag;
         }
 
-        public Vector3 GetAttachmentPoint(in RaycastHit rayHit) {
+        public Vector3 GetAttachmentPoint(Vector3 position) {
             Vector3 start = barStart.position;
             Vector3 end = barEnd.position;
-            Vector3 point = rayHit.point;
+            Vector3 point = position;
 
             Vector3 barDirection = end - start;
             float barLength = barDirection.magnitude;

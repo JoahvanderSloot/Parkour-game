@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LacheMovementModule
   m_EditorClassIdentifier: 
   CannotOverride: []
-  checkDistance: 1
+  checkDistance: 2
   checkRadius: 0.5
   lacheLayerMask:
     serializedVersion: 2

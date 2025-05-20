@@ -15,5 +15,9 @@ namespace Extensions {
         public static float MapClamped01(this float value, float fromMin, float fromMax) {
             return Mathf.Clamp01(value.Map(fromMin, fromMax, 0f, 1f));
         }
+
+        public static bool Approx(this float value, float otherValue) {
+            return Mathf.Approximately(value, otherValue);
+        }
     }
 }
