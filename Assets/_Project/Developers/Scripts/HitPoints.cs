@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class HitPoints : MonoBehaviour
 {
-    public bool IsHit;
+    [HideInInspector] public float KillTime;
+    [HideInInspector] public bool IsHit;
     Coroutine damageCoroutine;
     GameManager gameManager;
 
@@ -33,7 +34,7 @@ public class HitPoints : MonoBehaviour
 
     private IEnumerator Damage()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(KillTime);
         if (gameManager != null)
         {
             gameManager.settings.GameOver = true;

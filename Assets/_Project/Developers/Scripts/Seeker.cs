@@ -5,6 +5,7 @@ using UnityEngine;
 public class Seeker : MonoBehaviour
 {
     [SerializeField] float speed;
+    [SerializeField] float killSpeed;
     float realSpeed;
 
     [Header("Player Detection")]
@@ -78,6 +79,7 @@ public class Seeker : MonoBehaviour
                 if (_hitPoints != null)
                 {
                     _hitPoints.IsHit = true;
+                    _hitPoints.KillTime = killSpeed;
                 }
             }
         }

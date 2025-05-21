@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+  killSpeed: 1
   flashLight: {fileID: 5588463470346079975}
   detectionRange: 5
   obstacleMask:
