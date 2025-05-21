@@ -106,7 +106,7 @@ namespace PlayerSystems.Modules.MovementModules {
                 var force = Vector3.ProjectOnPlane(
                     vector: -Player.Motor.CharacterUp,
                     planeNormal: Player.Motor.GroundingStatus.GroundNormal
-                ) * slideGravity;
+                ) * -slideGravity;
 
                 currentVelocity -= force * deltaTime;
             }
