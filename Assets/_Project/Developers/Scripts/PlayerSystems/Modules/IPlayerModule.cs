@@ -7,6 +7,7 @@
     
     public interface IPlayerModule {
         ModuleLevel ModuleLevel { get; }
+        bool AllowBaseModuleActivation { get; }
         
         bool Enabled { get; }
         PlayerController Player { get; }

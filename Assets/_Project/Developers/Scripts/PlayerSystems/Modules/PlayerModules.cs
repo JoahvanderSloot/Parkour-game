@@ -88,6 +88,9 @@ namespace PlayerSystems.Modules {
                     Debug.LogWarning("Invalid module type for activation");
                     return;
             }
+            
+            if (!module.AllowBaseModuleActivation && module.ModuleLevel is not ModuleLevel.BaseModule)
+                activeBaseModule?.DisableModule();
         }
 
         void CheckMovementModuleActivation() {
@@ -96,7 +99,12 @@ namespace PlayerSystems.Modules {
             else if (ultimateAbilityModule?.ShouldActivate == true && CanActivateModule(ultimateAbilityModule))
                 ActivateModule(ultimateAbilityModule);
             
+            var baseModulesAllowed = activeModule?.AllowBaseModuleActivation ?? true;
+            
             foreach (var module in movementModules) {
+                if (module.ModuleLevel is ModuleLevel.BaseModule && !baseModulesAllowed)
+                    continue;
+                
                 if (module.ShouldActivate && module.Enabled == false && CanActivateModule(module)) {
                     ActivateModule(module);
                 }

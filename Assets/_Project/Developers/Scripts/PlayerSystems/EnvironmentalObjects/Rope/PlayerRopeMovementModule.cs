@@ -94,6 +94,8 @@ namespace PlayerSystems.EnvironmentalObjects {
         public override void EnableModule() {
             base.EnableModule();
             
+            Player.Motor.SetGroundSolvingActivation(false);
+            
             if (!latestHit.collider.TryGetComponent(out ropePart)) {
                 Debug.LogError("No rope part found");
                 DisableModule();
@@ -109,6 +111,8 @@ namespace PlayerSystems.EnvironmentalObjects {
         
         public override void DisableModule() {
             base.DisableModule();
+            
+            Player.Motor.SetGroundSolvingActivation(true);
             
             Player.Movement.VelocityUpdate -= MoveOnRope;
             
@@ -140,7 +144,9 @@ namespace PlayerSystems.EnvironmentalObjects {
             // Set minimum vertical speed to jump speed
             var currentVerticalSpeed = Vector3.Dot(currentVelocity, Player.Motor.CharacterUp);
             var targetVerticalSpeed = Mathf.Max(currentVerticalSpeed, verticalJumpStrength);
-            var horizontalForce = RequestedMovement * horizontalJumpStrength;
+            
+            var flattenedMovement = Vector3.ProjectOnPlane(RequestedMovement, Player.Motor.CharacterUp);
+            var horizontalForce = flattenedMovement * horizontalJumpStrength;
             
             // Add jump speed to the velocity
             var forceToAdd = Player.Motor.CharacterUp * (targetVerticalSpeed - currentVerticalSpeed) + horizontalForce;
