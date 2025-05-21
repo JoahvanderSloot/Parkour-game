@@ -2,21 +2,13 @@ using UnityEngine;
 
 public class CheckPoint : MonoBehaviour
 {
-    public bool isActive;
-    public bool isPlayerInTrigger;
+    [HideInInspector] public bool isActive;
+    [HideInInspector] public bool isPlayerInTrigger;
+    [SerializeField] GameObject visualObj;
 
     private void Update()
     {
-        if (isActive)
-        {
-            MeshRenderer _renderer = GetComponent<MeshRenderer>();
-            _renderer.material.color = Color.green;
-        }
-        else
-        {
-            MeshRenderer _renderer = GetComponent<MeshRenderer>();
-            _renderer.material.color = Color.black;
-        }
+        visualObj.SetActive(isActive);
     }
 
     private void OnTriggerEnter(Collider other)

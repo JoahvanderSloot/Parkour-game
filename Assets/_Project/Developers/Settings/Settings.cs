@@ -14,8 +14,9 @@ public class Settings : ScriptableObject
     public Color crosshairColor;
     [Header("Game Settings")]
     public bool Paused;
-    public float GameTimer;
+    public bool GameOver;
     [Header("Game Info")]
     public int Score;
     public int Highscore;
+    public float GameTimer;
 }

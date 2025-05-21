@@ -1,49 +1,67 @@
+using PlayerSystems;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {
     public Settings settings;
-    public float gameTime;
+    public float GameTime;
     [SerializeField] List<CheckPoint> checkPoints;
+    PlayerController player;
 
     private void Start()
     {
+        settings.GameOver = false;
         settings.Paused = false;
         settings.Score = 0;
-        gameTime = settings.GameTimer;
+        GameTime = settings.GameTimer;
         checkPoints[Random.Range(0, checkPoints.Count)].isActive = true;
+        GameObject _playerBody = GameObject.FindGameObjectWithTag("Player");
+        player = _playerBody.GetComponentInParent<PlayerController>();
+        player.enabled = true;
     }
 
     private void Update()
     {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (!settings.GameOver)
         {
-            settings.Paused = !settings.Paused;
+            if (Keyboard.current.escapeKey.wasPressedThisFrame)
+            {
+                settings.Paused = !settings.Paused;
+            }
+            Time.timeScale = settings.Paused ? 0 : 1;
+
+            Cursor.lockState = settings.Paused ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = settings.Paused;
+            player.enabled = !settings.Paused;
+
+            if (!settings.Paused)
+            {
+                GameCountdown();
+                CheckpointHandeling();
+            }
         }
-        Time.timeScale = settings.Paused ? 0 : 1;
-
-        Cursor.lockState = settings.Paused ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = settings.Paused;
-
-        if (!settings.Paused)
+        else
         {
-            GameTime();
-            CheckpointHandeling();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            player.enabled = false;
         }
     }
 
-    public void GameTime()
+    public void GameCountdown()
     {
-        gameTime -= Time.deltaTime;
-        if (gameTime <= 0)
+        GameTime -= Time.deltaTime;
+        if (GameTime <= 0)
         {
-            if(settings.Score > settings.Highscore)
+            if (settings.Score > settings.Highscore)
             {
                 settings.Highscore = settings.Score;
             }
-            Debug.Log("Game Over");
+            GameTime = 0;
+            settings.GameOver = true;
         }
     }
 
