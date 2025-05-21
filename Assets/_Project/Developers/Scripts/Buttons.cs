@@ -15,7 +15,7 @@ public class Buttons : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("JoahTest");
+        SceneManager.LoadScene("TestMap");
     }
 
     public void UnPause()
