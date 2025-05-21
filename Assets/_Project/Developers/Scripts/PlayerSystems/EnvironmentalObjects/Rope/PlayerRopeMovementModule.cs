@@ -144,7 +144,9 @@ namespace PlayerSystems.EnvironmentalObjects {
             // Set minimum vertical speed to jump speed
             var currentVerticalSpeed = Vector3.Dot(currentVelocity, Player.Motor.CharacterUp);
             var targetVerticalSpeed = Mathf.Max(currentVerticalSpeed, verticalJumpStrength);
-            var horizontalForce = RequestedMovement * horizontalJumpStrength;
+            
+            var flattenedMovement = Vector3.ProjectOnPlane(RequestedMovement, Player.Motor.CharacterUp);
+            var horizontalForce = flattenedMovement * horizontalJumpStrength;
             
             // Add jump speed to the velocity
             var forceToAdd = Player.Motor.CharacterUp * (targetVerticalSpeed - currentVerticalSpeed) + horizontalForce;

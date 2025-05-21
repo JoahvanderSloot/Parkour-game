@@ -52,4 +52,4 @@ MonoBehaviour:
       _useFixedUpdate: 0
       _updateType: 0
   enableLogs: 0
-  drawSwing: 1
+  drawSwing: 0
