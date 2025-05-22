@@ -14,7 +14,7 @@ namespace PlayerSystems.Interaction {
         public static readonly int InteractableLayerIndex = LayerMask.NameToLayer(c_InteractableLayerName);
         public static readonly int InteractableLayerMask = 1 << InteractableLayerIndex;
         
-        bool MustBeLookedAt { get; }
+        bool RequireLook { get; }
         
         bool OnInteract(PlayerController player, InteractionPhase phase);
         void OnHoverEnter();

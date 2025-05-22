@@ -39,12 +39,12 @@ namespace PlayerSystems.EnvironmentalObjects {
         bool jumpRequested;
         
         protected override void Initialize() {
-           Input.Interact += OnInteractPressed;
+           Input.Interact += OnInteractInput;
         }
 
         void OnDisable() {
             if (Application.isPlaying && Player != null) {
-                Input.Interact -= OnInteractPressed;
+                Input.Interact -= OnInteractInput;
             }
         }
 
@@ -74,7 +74,10 @@ namespace PlayerSystems.EnvironmentalObjects {
             return true;
         }
 
-        void OnInteractPressed() {
+        void OnInteractInput(ButtonPhase phase) {
+            if (phase is ButtonPhase.Released)
+                return;
+            
             if (attached)
                 DetachFromRope();
             else

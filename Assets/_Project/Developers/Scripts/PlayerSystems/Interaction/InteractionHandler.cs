@@ -8,8 +8,6 @@ namespace PlayerSystems.Interaction {
         
         [SerializeField] float rayDistance = 3f;
         [SerializeField] float headProbeRadius = 2f;
-
-        public float RayDistance => rayDistance;
         
         PlayerController player;
         GameplayInputReader Input => player.GameplayInput;

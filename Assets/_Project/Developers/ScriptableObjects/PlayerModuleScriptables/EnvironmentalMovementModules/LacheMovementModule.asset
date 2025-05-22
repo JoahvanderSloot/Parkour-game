@@ -13,12 +13,8 @@ MonoBehaviour:
   m_Name: LacheMovementModule
   m_EditorClassIdentifier: 
   CannotOverride: []
-  checkDistance: 2
-  checkRadius: 0.5
-  lacheLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
   initialForceMultiplier: 25
+  lacheCooldown: 0.2
   detachForceMultiplier: 100
   verticalJumpStrength: 10
   horizontalJumpStrength: 5
@@ -33,7 +29,7 @@ MonoBehaviour:
   swingPositionResponse: 20
   attachmentOffsetTweenSettings:
     startFromCurrent: 0
-    startValue: {x: -0.2852702, y: 0.11086726, z: -0.050815105}
+    startValue: {x: -0.6231947, y: -0.12883067, z: -0.020549297}
     endValue: {x: 0, y: 0, z: 0}
     settings:
       duration: 1
@@ -51,5 +47,5 @@ MonoBehaviour:
       useUnscaledTime: 0
       _useFixedUpdate: 0
       _updateType: 0
-  enableLogs: 0
-  drawSwing: 0
+  enableLogs: 1
+  drawSwing: 1

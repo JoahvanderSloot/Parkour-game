@@ -25,7 +25,7 @@ namespace PlayerSystems.Interaction {
 
             for (var i = 0; i < count; i++) {
                 var collider = s_overlapResults[i];
-                if (!collider || !collider.TryGetComponent(out interactable) || interactable.MustBeLookedAt)
+                if (!collider || !collider.TryGetComponent(out interactable) || interactable.RequireLook)
                     continue;
                 
                 var colliderPoint = collider.ClosestPoint(position);
