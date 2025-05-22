@@ -12,11 +12,13 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
         
         public Vector3 BarDirection => (barEnd.position - barStart.position).normalized;
 
+        public bool AllowInteraction = true;
+        
         void Start() {
             gameObject.tag = c_LacheTag;
-            gameObject.layer = IInteractable.InteractableLayer;
+            gameObject.layer = IInteractable.InteractableLayerIndex;
         }
-
+        
         public Vector3 GetAttachmentPoint(Vector3 position) {
             Vector3 start = barStart.position;
             Vector3 end = barEnd.position;
@@ -34,8 +36,15 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
         }
 
         public bool MustBeLookedAt => false;
-        public void Interact(PlayerController player) {
+        public bool OnInteract(PlayerController player, InteractionPhase phase) {
+            if (!AllowInteraction)
+                return false;
+            
+            if (phase is InteractionPhase.Released)
+                return false;
+            
             Debug.Log("Interacting with Lache");
+            return true;
         }
         public void OnHoverEnter() {
             Debug.Log("Hovering with Lache");

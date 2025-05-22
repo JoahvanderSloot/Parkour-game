@@ -33,6 +33,7 @@ namespace PlayerSystems {
         private PlayerInput oldInput;
         
         [SerializeField] InteractionHandler interactionHandler;
+        public InteractionHandler InteractionHandler => interactionHandler;
         
         [SerializeField] GameplayInputReader gameplayInputReader;
         public GameplayInputReader GameplayInput => gameplayInputReader;

@@ -1,12 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using PlayerSystems.Input;
+using UnityEngine;
 
 namespace PlayerSystems.Interaction {
     public class InteractionHandler : MonoBehaviour {
+        public event Action<IInteractable, Vector3> OnInteract;
+        
         [SerializeField] float rayDistance = 3f;
         [SerializeField] float headProbeRadius = 2f;
-        [SerializeField] LayerMask interactableLayer;
 
+        public float RayDistance => rayDistance;
+        
         PlayerController player;
+        GameplayInputReader Input => player.GameplayInput;
         
         IInteractable currentInteractable;
 
@@ -15,22 +21,40 @@ namespace PlayerSystems.Interaction {
         }
 
         void Update() {
-            HandleInteractionProbing();
-            
-            if (player.GameplayInput.InteractPressed)
-                HandleInteraction(currentInteractable);
+            HandleInteractionProbing(out var hitPoint);
+            HandleInteraction(currentInteractable, hitPoint);
         }
 
-        void HandleInteractionProbing() {
+        void HandleInteractionProbing(out Vector3 interactionPoint) {
             var ray = player.MainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-            if (!InteractableProber.ProbeCrosshair(ray, rayDistance, interactableLayer, out var interactable))
-                InteractableProber.ProbeAroundPoint(player.MainCamera.transform.position, headProbeRadius, interactableLayer, out interactable);
+            if (!InteractableProber.Probe(ray, rayDistance, out var interactable, out interactionPoint))
+                InteractableProber.ProbeAroundPoint(player.MainCamera.transform.position, headProbeRadius, out interactable, out interactionPoint);
 
             HandleInteractableHit(interactable);
         }
 
-        void HandleInteraction(IInteractable interactable) {
-            interactable?.Interact(player);
+        void HandleInteraction(IInteractable interactable, Vector3 hitPoint) {
+            if (interactable == null)
+                return;
+
+            if (Input.InteractPressedThisFrame) {
+                if (interactable.OnInteract(player, InteractionPhase.Pressed))
+                    OnInteract?.Invoke(interactable, hitPoint);
+                    
+                return;
+            }
+            
+            if (Input.InteractPressed) {
+                if (interactable.OnInteract(player, InteractionPhase.Held))
+                    OnInteract?.Invoke(interactable, hitPoint);
+                
+                return;
+            }
+            
+            if (Input.InteractReleasedThisFrame) {
+                if (interactable.OnInteract(player, InteractionPhase.Released))
+                    OnInteract?.Invoke(interactable, hitPoint);
+            }
         }
 
         void HandleInteractableHit(IInteractable interactable) {
