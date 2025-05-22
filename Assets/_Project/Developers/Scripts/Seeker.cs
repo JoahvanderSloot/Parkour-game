@@ -35,9 +35,9 @@ public class Seeker : MonoBehaviour
 
             float _distance = Vector3.Distance(transform.position, _targetPosition);
 
-            if (_distance > 5f)
+            if (_distance > 3.5f)
             {
-                realSpeed = speed * 2;
+                realSpeed = speed + _distance;
             }
             else
             {

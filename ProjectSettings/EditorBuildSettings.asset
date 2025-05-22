@@ -14,9 +14,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Developers/Scenes/JoahTest.unity
     guid: 53772cb1eeb4a294196a9d0328b66e97
-  - enabled: 1
-    path: Assets/_Project/Developers/Scenes/TestMap.unity
-    guid: 0720fe07c3f7ee344aeaec9445bbe172
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
