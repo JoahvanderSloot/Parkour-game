@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44092e6ae9f84a41b87f9be2db3c2a55, type: 3}
+  m_Name: RopeMovementModule
+  m_EditorClassIdentifier: 
+  CannotOverride: []
+  ropeCheckDistance: 1.5
+  ropeCheckRadius: 1
+  ropeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  verticalJumpStrength: 10
+  horizontalJumpStrength: 5
+  initialForceMultiplier: 0.5
+  acceleration: 0.025
+  accelerationFactor: 0.25
+  minimumAcceleration: 0.1
+  maximumAcceleration: 1
+  forceUpdateSpread: 2
+  ropeClingResponse: 10
