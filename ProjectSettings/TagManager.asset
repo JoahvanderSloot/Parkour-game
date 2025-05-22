@@ -6,6 +6,7 @@ TagManager:
   tags:
   - RopePart
   - Lache
+  - Navigator
   layers:
   - Default
   - TransparentFX

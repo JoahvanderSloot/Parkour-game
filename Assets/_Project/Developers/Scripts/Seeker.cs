@@ -7,6 +7,7 @@ public class Seeker : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float killSpeed;
     float realSpeed;
+    GameManager gameManager;
 
     [Header("Player Detection")]
     [SerializeField] GameObject flashLight;
@@ -20,11 +21,12 @@ public class Seeker : MonoBehaviour
     {
         realSpeed = speed;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        gameManager = FindFirstObjectByType<GameManager>();
     }
 
     private void Update()
     {
-        if (player != null)
+        if (player != null && !gameManager.settings.GameOver)
         {
             Vector3 _targetPosition = player.position;
             _targetPosition.y = transform.position.y;

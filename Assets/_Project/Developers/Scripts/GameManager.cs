@@ -2,14 +2,17 @@ using PlayerSystems;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {
+    PlayerController player;
+    
     public Settings settings;
     public float GameTime;
     [SerializeField] List<CheckPoint> checkPoints;
-    PlayerController player;
+
+    Transform currentCheckP;
+    GameObject navigator;
 
     private void Start()
     {
@@ -17,10 +20,14 @@ public class GameManager : MonoBehaviour
         settings.Paused = false;
         settings.Score = 0;
         GameTime = settings.GameTimer;
-        checkPoints[Random.Range(0, checkPoints.Count)].isActive = true;
+
         GameObject _playerBody = GameObject.FindGameObjectWithTag("Player");
         player = _playerBody.GetComponentInParent<PlayerController>();
+        checkPoints[Random.Range(0, checkPoints.Count)].isActive = true;
         player.enabled = true;
+
+        navigator = GameObject.FindGameObjectWithTag("Navigator");
+        navigator.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -41,6 +48,7 @@ public class GameManager : MonoBehaviour
             {
                 GameCountdown();
                 CheckpointHandeling();
+                Navigation();
             }
         }
         else
@@ -48,6 +56,7 @@ public class GameManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             player.enabled = false;
+            navigator.SetActive(false);
         }
     }
 
@@ -71,13 +80,18 @@ public class GameManager : MonoBehaviour
 
         foreach (CheckPoint _checkP in checkPoints)
         {
-            if (_checkP.isActive && _checkP.isPlayerInTrigger)
+            if (_checkP.isActive)
             {
-                _checkP.isActive = false;
-                _checkP.isPlayerInTrigger = false;
-                settings.Score++;
-                _completedCheckpoint = _checkP;
-                break;
+                currentCheckP = _checkP.transform;
+
+                if (_checkP.isPlayerInTrigger)
+                {
+                    _checkP.isActive = false;
+                    _checkP.isPlayerInTrigger = false;
+                    settings.Score++;
+                    _completedCheckpoint = _checkP;
+                    break;
+                }
             }
         }
 
@@ -91,4 +105,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    private void Navigation()
+    {
+        if (Keyboard.current.tabKey.wasPressedThisFrame)
+        {
+            navigator.gameObject.SetActive(true);
+        }
+        else if (Keyboard.current.tabKey.wasReleasedThisFrame)
+        {
+            navigator.gameObject.SetActive(false);
+        }
+
+        Transform _arrow = navigator.transform.GetChild(0);
+        _arrow.LookAt(currentCheckP);
+    }
 }
