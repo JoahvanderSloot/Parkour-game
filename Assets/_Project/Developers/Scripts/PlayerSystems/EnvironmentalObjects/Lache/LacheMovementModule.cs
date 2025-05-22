@@ -80,6 +80,10 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
             }
         }
 
+        public void OnInteractWithLache(Lache lache) {
+            
+        }
+
         void OnInteractPressed() {
             if (attached)
                 shouldDetach = true;

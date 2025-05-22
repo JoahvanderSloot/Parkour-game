@@ -751,6 +751,7 @@ GameObject:
   - component: {fileID: 8853775913293271310}
   - component: {fileID: 478792646506858931}
   - component: {fileID: 1900721668740070094}
+  - component: {fileID: 280725057369401760}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -793,6 +794,7 @@ MonoBehaviour:
   playerCamera: {fileID: 2613839098708650953}
   mainCamera: {fileID: 2896084025891633888}
   playerFX: {fileID: 3037423111136309366}
+  interactionHandler: {fileID: 280725057369401760}
   gameplayInputReader: {fileID: 11400000, guid: 5f7c41c7629d802459ac45c1b3a5d44c, type: 2}
   playerModules: {fileID: 1900721668740070094}
 --- !u!114 &1900721668740070094
@@ -817,6 +819,23 @@ MonoBehaviour:
   effectModules: []
   movementAbilityModule: {fileID: 11400000, guid: 24feeae9a497682439254a910d34d50e, type: 2}
   ultimateAbilityModule: {fileID: 0}
+--- !u!114 &280725057369401760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3326903327775133783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8765b88003b47ee9b11129618b145be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rayDistance: 3
+  headProbeRadius: 2
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &4732503935996445315
 GameObject:
   m_ObjectHideFlags: 0
