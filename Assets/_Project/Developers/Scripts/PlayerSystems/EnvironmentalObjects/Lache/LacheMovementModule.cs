@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Extensions;
+﻿using Extensions;
 using PlayerSystems.Input;
 using PlayerSystems.Interaction;
 using PlayerSystems.Modules;
@@ -73,7 +71,7 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
         public override ModuleLevel ModuleLevel => ModuleLevel.ManualActivationModule;
         public override bool ShouldActivate => CheckForActivation();
 
-        public override void ModuleUpdate() { Debug.Log("InterackIsPressed " + interactIsPressed); }
+        public override void ModuleUpdate() { }
 
         protected override void Initialize() {
             Player.InteractionHandler.OnInteract += OnInteract;

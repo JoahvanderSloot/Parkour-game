@@ -831,11 +831,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8765b88003b47ee9b11129618b145be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayDistance: 3
-  headProbeRadius: 2
-  interactableLayer:
-    serializedVersion: 2
-    m_Bits: 1024
+  rayDistance: 2.5
+  headProbeRadius: 1.75
 --- !u!1 &4732503935996445315
 GameObject:
   m_ObjectHideFlags: 0

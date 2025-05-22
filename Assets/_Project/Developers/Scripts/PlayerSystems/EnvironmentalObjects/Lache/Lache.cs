@@ -16,7 +16,7 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
         
         void Start() {
             gameObject.tag = c_LacheTag;
-            gameObject.layer = IInteractable.InteractableLayerIndex;
+            gameObject.layer = IInteractable.InteractableLayer;
         }
         
         public Vector3 GetAttachmentPoint(Vector3 position) {
