@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PlayerSystems.Modules {
     public abstract class MovementModule : ScriptableObject, IPlayerModule {
-        [SerializeField] List<MovementModule> CannotOverride;
+        [SerializeField] protected List<MovementModule> CannotOverride;
         MovementModule[] modulesToActivateInTandem;
         
         public bool CanOverride(MovementModule module) {

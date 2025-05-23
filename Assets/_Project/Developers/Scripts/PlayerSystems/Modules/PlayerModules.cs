@@ -9,6 +9,9 @@ namespace PlayerSystems.Modules {
         public event Action<IPlayerModule> OnModuleRemoved;
         public event Action<MovementAbilityModule> OnMovementAbilityModuleChanged;
         public event Action<UltimateAbilityModule> OnUltimateAbilityModuleChanged;
+
+        public event Action<IPlayerModule> OnModuleEnabled;
+        public event Action<IPlayerModule> OnModuleDisabled;
         
         [SerializeField] List<MovementModule> movementModules;
         [SerializeField] List<EffectModule> effectModules;
@@ -16,10 +19,11 @@ namespace PlayerSystems.Modules {
         [SerializeField] MovementAbilityModule movementAbilityModule;
         [SerializeField] UltimateAbilityModule ultimateAbilityModule;
 
-        IPlayerModule activeModule;
+        public IPlayerModule ActiveModule { get; private set; }
         MovementModule activeBaseModule;
         
         PlayerController playerController;
+        
 
         public void InitializeModules(PlayerController player) {
             playerController = player;
@@ -60,29 +64,29 @@ namespace PlayerSystems.Modules {
                 case MovementModule movementModule:
                     if (movementModule.ModuleLevel is ModuleLevel.BaseModule) {
                         if (movementModule.CanOverride(activeBaseModule)) {
-                            activeBaseModule?.DisableModule();
+                            DisableModule(activeBaseModule);
                             activeBaseModule = movementModule;
                             activeBaseModule.EnableModule();
                         }
                     }
-                    else if (activeModule == null || activeModule is MovementModule mm && movementModule.CanOverride(mm)) {
-                        activeModule?.DisableModule();
-                        activeModule = movementModule;
-                        activeModule.EnableModule();
+                    else if (ActiveModule == null || ActiveModule is MovementModule mm && movementModule.CanOverride(mm)) {
+                        DisableModule(ActiveModule);
+                        ActiveModule = movementModule;
+                        ActiveModule.EnableModule();
                     }
                     break;
                 case EffectModule effectModule:
                     effectModule.EnableModule();
                     break;
                 case MovementAbilityModule movAbilityModule:
-                    activeModule?.DisableModule();
-                    activeModule = movAbilityModule;
-                    activeModule.EnableModule();
+                    DisableModule(ActiveModule);
+                    ActiveModule = movAbilityModule;
+                    ActiveModule.EnableModule();
                     break;
                 case UltimateAbilityModule ultAbilityModule:
-                    activeModule?.DisableModule();
-                    activeModule = ultAbilityModule;
-                    activeModule.EnableModule();
+                    DisableModule(ActiveModule);
+                    ActiveModule = ultAbilityModule;
+                    ActiveModule.EnableModule();
                     break;
                 default:
                     Debug.LogWarning("Invalid module type for activation");
@@ -90,7 +94,17 @@ namespace PlayerSystems.Modules {
             }
             
             if (!module.AllowBaseModuleActivation && module.ModuleLevel is not ModuleLevel.BaseModule)
-                activeBaseModule?.DisableModule();
+                DisableModule(activeBaseModule);
+            
+            OnModuleEnabled?.Invoke(module);
+        }
+
+        void DisableModule(IPlayerModule module) {
+            if (module is null)
+                return;
+            
+            module.DisableModule();
+            OnModuleDisabled?.Invoke(module);
         }
 
         void CheckMovementModuleActivation() {
@@ -99,7 +113,7 @@ namespace PlayerSystems.Modules {
             else if (ultimateAbilityModule?.ShouldActivate == true && CanActivateModule(ultimateAbilityModule))
                 ActivateModule(ultimateAbilityModule);
             
-            var baseModulesAllowed = activeModule?.AllowBaseModuleActivation ?? true;
+            var baseModulesAllowed = ActiveModule?.AllowBaseModuleActivation ?? true;
             
             foreach (var module in movementModules) {
                 if (module.ModuleLevel is ModuleLevel.BaseModule && !baseModulesAllowed)
@@ -113,10 +127,10 @@ namespace PlayerSystems.Modules {
 
         // TODO: Implement module removal after UpdateModules (if module removed during UpdateModules, it will throw an error)
         public void UpdateModules() {
-            if (activeModule?.Enabled == true)
-                activeModule?.ModuleUpdate();
+            if (ActiveModule?.Enabled == true)
+                ActiveModule?.ModuleUpdate();
             else 
-                activeModule = null;
+                ActiveModule = null;
 
             if (activeBaseModule?.Enabled == true)
                 activeBaseModule?.ModuleUpdate();
@@ -137,8 +151,8 @@ namespace PlayerSystems.Modules {
             if (module.ModuleLevel is ModuleLevel.BaseModule)
                 return true;
             
-            bool isHigherOrEqualLevel = activeModule == null || module.ModuleLevel >= activeModule.ModuleLevel;
-            bool canOverride = activeModule == null || activeModule.CannotBeOverridden == false;
+            bool isHigherOrEqualLevel = ActiveModule == null || module.ModuleLevel >= ActiveModule.ModuleLevel;
+            bool canOverride = ActiveModule == null || ActiveModule.CannotBeOverridden == false;
             return canOverride && isHigherOrEqualLevel;
         }
  

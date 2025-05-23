@@ -152,6 +152,8 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
         public override void DisableModule() {
             base.DisableModule();
             
+            Player.Movement.InvokeOnResetJumps();
+            
             shouldDetach = false;
             Player.Motor.SetGroundSolvingActivation(true);
 

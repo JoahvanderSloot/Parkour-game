@@ -34650,7 +34650,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2100366927
 Transform:
   m_ObjectHideFlags: 0
@@ -34682,7 +34682,7 @@ MonoBehaviour:
   damageFlashImage: {fileID: 1022806073}
   timerText: {fileID: 1736310507}
   scoreText: {fileID: 1677679558}
-  GameOver: {fileID: 0}
+  GameOver: {fileID: 273550474}
   gameOverText: {fileID: 0}
   highscoreText: {fileID: 0}
   finalScore: {fileID: 0}
