@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using KinematicCharacterController;
+using PlayerSystems.Interaction;
 using UnityEngine;
 
 namespace PlayerSystems.EnvironmentalObjects {
@@ -33,10 +34,10 @@ namespace PlayerSystems.EnvironmentalObjects {
             segmentPositions = new Vector3[ropeVerlet.Segments.Length];
             lineRenderer.positionCount = segmentPositions.Length;
             
-            CreateColliders();
+            CreateRopeParts();
         }
 
-        void CreateColliders() {
+        void CreateRopeParts() {
             if (ropeParts != null)
                 DestroyRopeParts();
             
@@ -46,7 +47,8 @@ namespace PlayerSystems.EnvironmentalObjects {
                     transform = {
                         parent = transform
                     },
-                    tag = c_RopePartTag
+                    tag = c_RopePartTag,
+                    layer = IInteractable.InteractableLayer
                 };
                 
                 var ropePart = colliderObject.AddComponent<RopePart>();

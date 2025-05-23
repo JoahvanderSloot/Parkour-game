@@ -16478,6 +16478,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 932683753}
   m_Mesh: {fileID: 151702863}
+--- !u!4 &933029042 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1652416440738615714, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+  m_PrefabInstance: {fileID: 1850371274}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &935390316
 Mesh:
   m_ObjectHideFlags: 0
@@ -31770,6 +31775,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1689596934}
+  - {fileID: 933029042}
   - {fileID: 1854447747}
   - {fileID: 1631715644}
   - {fileID: 1768682065}
@@ -32266,6 +32272,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60bc027664d8ac14d98b00f100c9483f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &1850371274
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1756328694}
+    m_Modifications:
+    - target: {fileID: 1652416440738615714, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652416440738615714, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652416440738615714, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652416440738615714, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652416440738615714, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652416440738615714, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652416440738615714, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652416440738615714, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652416440738615714, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652416440738615714, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2139289139805196878, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+      propertyPath: m_Name
+      value: HangingLache (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7725807873585870949, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
+      propertyPath: m_Radius
+      value: 0.5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
 --- !u!4 &1854447747 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1652416440738615714, guid: 8140f6824eb4c6f43b032ff83fd0394e, type: 3}
@@ -34583,7 +34650,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2100366927
 Transform:
   m_ObjectHideFlags: 0
@@ -34615,10 +34682,10 @@ MonoBehaviour:
   damageFlashImage: {fileID: 1022806073}
   timerText: {fileID: 1736310507}
   scoreText: {fileID: 1677679558}
-  GameOver: {fileID: 273550474}
-  gameOverText: {fileID: 765789451}
-  highscoreText: {fileID: 1037557162}
-  finalScore: {fileID: 639986706}
+  GameOver: {fileID: 0}
+  gameOverText: {fileID: 0}
+  highscoreText: {fileID: 0}
+  finalScore: {fileID: 0}
   EscMenu: {fileID: 1226642410}
   gameManager: {fileID: 78161252}
 --- !u!1 &2101930895
@@ -35247,6 +35314,10 @@ PrefabInstance:
     - target: {fileID: 3655732130339081691, guid: 0b990bf6167033f46b588aa32784bae3, type: 3}
       propertyPath: m_Name
       value: Drone
+      objectReference: {fileID: 0}
+    - target: {fileID: 3655732130339081691, guid: 0b990bf6167033f46b588aa32784bae3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7401974654909331618, guid: 0b990bf6167033f46b588aa32784bae3, type: 3}
       propertyPath: speed

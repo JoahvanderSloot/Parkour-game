@@ -31,7 +31,7 @@ namespace PlayerSystems.Input {
         public event Action<ButtonPhase> ThrowGrenade;
         public event Action<ButtonPhase> UltimateAbility;
         public event Action<ButtonPhase> Reload;
-        public event Action Interact;
+        public event Action<ButtonPhase> Interact;
         
         public PlayerInputActions InputActions;
         
@@ -235,10 +235,14 @@ namespace PlayerSystems.Input {
             }
         }
         public void OnInteract(InputAction.CallbackContext context) {
-            if (context.phase != InputActionPhase.Started)
-                return;
-
-            Interact?.Invoke();;
+            switch (context.phase) {
+                case InputActionPhase.Started:
+                    Interact?.Invoke(ButtonPhase.Pressed);
+                    break;
+                case InputActionPhase.Canceled:
+                    Interact?.Invoke(ButtonPhase.Released);
+                    break;
+            }
         }
 
         public void Dispose() {

@@ -6,10 +6,8 @@ namespace PlayerSystems.Interaction {
     public class InteractionHandler : MonoBehaviour {
         public event Action<IInteractable, Vector3> OnInteract;
         
-        [SerializeField] float rayDistance = 3f;
-        [SerializeField] float headProbeRadius = 2f;
-
-        public float RayDistance => rayDistance;
+        [SerializeField] float probeDistance = 2.5f;
+        [SerializeField] float headProbeRadius = 1.75f;
         
         PlayerController player;
         GameplayInputReader Input => player.GameplayInput;
@@ -27,7 +25,7 @@ namespace PlayerSystems.Interaction {
 
         void HandleInteractionProbing(out Vector3 interactionPoint) {
             var ray = player.MainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-            if (!InteractableProber.Probe(ray, rayDistance, out var interactable, out interactionPoint))
+            if (!InteractableProber.Probe(ray, probeDistance, out var interactable, out interactionPoint))
                 InteractableProber.ProbeAroundPoint(player.MainCamera.transform.position, headProbeRadius, out interactable, out interactionPoint);
 
             HandleInteractableHit(interactable);
