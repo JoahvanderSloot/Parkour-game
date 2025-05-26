@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using ImprovedTimers;
 using PlayerSystems.Input;
 using PlayerSystems.Movement;
@@ -304,8 +302,13 @@ namespace PlayerSystems.Modules.MovementModules {
         }
         
         void JumpOut(ref Vector3 currentVelocity) {
-            Vector3 forceToApply = attachedWallHit.normal * jumpOutForce + Player.Motor.CharacterUp * jumpUpForce;
-            currentVelocity += forceToApply;
+            var currentVerticalSpeed = Vector3.Dot(currentVelocity, Player.Motor.CharacterUp);
+            var targetVerticalSpeed = Mathf.Max(currentVerticalSpeed, jumpUpForce);
+            var verticalForce = Player.Motor.CharacterUp * (targetVerticalSpeed - currentVerticalSpeed);
+            
+            var horizontalForce = attachedWallHit.normal * jumpOutForce;
+            
+            currentVelocity += verticalForce + horizontalForce;
             
             cooldownTimer.Reset(cooldownAfterJump);
             cooldownTimer.Start();

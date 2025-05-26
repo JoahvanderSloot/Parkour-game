@@ -123,6 +123,8 @@ namespace PlayerSystems.EnvironmentalObjects {
         public override void DisableModule() {
             base.DisableModule();
             
+            Player.Movement.InvokeOnResetJumps();
+            
             Player.Motor.SetGroundSolvingActivation(true);
             
             Player.Movement.VelocityUpdate -= MoveOnRope;
