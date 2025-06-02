@@ -12,6 +12,9 @@ namespace PlayerSystems.Modules.MovementAbilityModules {
         //[SerializeField] float smoothing = 0.33f;
         [SerializeField] float dashDuration = 0.15f;
         [SerializeField, Range(0,1)] float retainedSpeed = 0.33f;
+        [Space]
+        [Tooltip("How much does vertical speed count towards dash speed calculation")]
+        [SerializeField] float verticalSpeedFactor = 0.25f;
         
         float DashSpeed => Mathf.Min(Player.Movement.Speed * dashSpeedScale, maxDashSpeed);
         
@@ -82,7 +85,12 @@ namespace PlayerSystems.Modules.MovementAbilityModules {
             dashing = true;
             dashTimer.Reset(dashDuration);
             dashTimer.Start();
-            speedBeforeDash = Player.Movement.GetState().Velocity.magnitude;
+
+            // Get the current horizontal speed
+            var velocity = Player.Movement.GetState().Velocity;
+            var horizontalSpeed = Mathf.Sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
+            var verticalSpeed = velocity.y;
+            speedBeforeDash = horizontalSpeed + verticalSpeed * verticalSpeedFactor;
             
             var moveDirection = new Vector3(Input.MoveInputDirection.x, 0, Input.MoveInputDirection.y);
             Vector3.ClampMagnitude(moveDirection, 1);
