@@ -28,6 +28,16 @@ namespace PlayerSystems.Modules.MovementModules {
         [SerializeField] float cooldownOnSimilarWall = 1f;
         [Space] 
         [SerializeField] LayerMask wallLayers;
+        
+        [Header("Camera Tilt")]
+        [SerializeField] Vector3 cameraTilt = new (10f, 0f, 0f);
+        [SerializeField] float tiltInResponse = 5f;
+        [SerializeField] float tiltOutResponse = 5f;
+        [Header("Camera Offset")]
+        [SerializeField] Vector3 cameraOffset = new (0f, 0f, -0.1f);
+        [SerializeField] float cameraOffsetInResponse = 5f;
+        [SerializeField] float cameraOffsetOutResponse = 5f;
+        
         float WallClimbSpeed => Player.Movement.Speed * wallClimbSpeedScale;
         
         bool hasWall;
@@ -90,11 +100,8 @@ namespace PlayerSystems.Modules.MovementModules {
             
             Player.Effects.CameraBob.Enable();
             
-            // var tiltZ = attachedWallRight ? cameraTiltZ : -cameraTiltZ;
-            // Player.Effects.CameraTilt.SetTilt(new Vector3(0f, 0f, tiltZ), tiltInResponse);
-            //
-            // var offsetX = attachedWallRight ? -cameraOffsetX : cameraOffsetX;
-            // Player.Effects.CameraOffset.SetOffset(new Vector3(offsetX, 0f, 0f), cameraOffsetInResponse);
+            Player.Effects.CameraTilt.SetTilt(cameraTilt, tiltInResponse);
+            Player.Effects.CameraOffset.SetOffset(cameraOffset, cameraOffsetInResponse);
         }
         public override void DisableModule() {
             base.DisableModule();
@@ -115,8 +122,8 @@ namespace PlayerSystems.Modules.MovementModules {
             Player.Movement.LateVelocityUpdate -= BufferJump;
             
             Player.Effects.CameraBob.Disable();
-            // Player.Effects.CameraTilt.ResetTilt(tiltOutResponse);
-            // Player.Effects.CameraOffset.ResetOffset(cameraOffsetOutResponse);
+            Player.Effects.CameraTilt.ResetTilt(tiltOutResponse);
+            Player.Effects.CameraOffset.ResetOffset(cameraOffsetOutResponse);
         }
 
         void DetachFromWall() {
@@ -137,8 +144,8 @@ namespace PlayerSystems.Modules.MovementModules {
             Player.Movement.LateVelocityUpdate += BufferJump;
 
             Player.Effects.CameraBob.Disable();
-            // Player.Effects.CameraTilt.ResetTilt(tiltOutResponse);
-            // Player.Effects.CameraOffset.ResetOffset(cameraOffsetOutResponse);
+            Player.Effects.CameraTilt.ResetTilt(tiltOutResponse);
+            Player.Effects.CameraOffset.ResetOffset(cameraOffsetOutResponse);
         }
         
         void OnJump(ButtonPhase phase) {

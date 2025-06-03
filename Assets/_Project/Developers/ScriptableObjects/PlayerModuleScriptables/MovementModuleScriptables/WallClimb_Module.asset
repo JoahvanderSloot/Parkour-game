@@ -16,7 +16,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 589d5d3c667ac974aa399f1c47f6e317, type: 2}
   wallClimbSpeedScale: 1.5
   wallRunResponse: 20
-  wallClimbDuration: 1
+  wallClimbDuration: 1.5
   jumpOutForce: 10000
   jumpUpForce: 10
   coyoteTime: 0.2
@@ -32,3 +32,9 @@ MonoBehaviour:
   wallLayers:
     serializedVersion: 2
     m_Bits: 4294967295
+  cameraTilt: {x: -15, y: 0, z: 0}
+  tiltInResponse: 5
+  tiltOutResponse: 5
+  cameraOffset: {x: 0, y: 0, z: -0.5}
+  cameraOffsetInResponse: 5
+  cameraOffsetOutResponse: 5
