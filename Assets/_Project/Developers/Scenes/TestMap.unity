@@ -15455,12 +15455,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1900721668740070094, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
       propertyPath: movementModules.Array.size
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1900721668740070094, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
       propertyPath: 'movementModules.Array.data[6]'
       value: 
       objectReference: {fileID: 11400000, guid: d71ccf9930eebef4487b3d12fc0b5193, type: 2}
+    - target: {fileID: 1900721668740070094, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
+      propertyPath: 'movementModules.Array.data[7]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f88d1e8a8259fda4bbc5af8f67f2b021, type: 2}
     - target: {fileID: 3326903327775133783, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
       propertyPath: m_Name
       value: Player

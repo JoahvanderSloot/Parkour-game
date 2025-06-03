@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldownStartMode: 0
   cooldown: 0.5
-  dashSpeed: 21.2
-  smoothing: 0.81
+  dashSpeedScale: 2.65
+  maxDashSpeed: 50
   dashDuration: 0.2
-  retainedSpeed: 0.058
+  retainedSpeed: 0.5
+  verticalSpeedFactor: 0.25
