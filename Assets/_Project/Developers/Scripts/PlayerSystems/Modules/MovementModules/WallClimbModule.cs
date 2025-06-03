@@ -3,6 +3,7 @@ using ImprovedTimers;
 using PlayerSystems.Input;
 using PlayerSystems.Movement;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 
 namespace PlayerSystems.Modules.MovementModules {
@@ -13,7 +14,7 @@ namespace PlayerSystems.Modules.MovementModules {
         [SerializeField] float wallClimbDuration = 2f;
         [Space]
         [SerializeField] float jumpOutForce = 10f;
-        [SerializeField] float jumpUpForce = 10f;
+        [FormerlySerializedAs("jumpUpSpeed")] [SerializeField] float jumpUpForce = 10f;
         [SerializeField] float coyoteTime = 0.2f;
         [Space]
         [SerializeField] Vector2 minMaxBankAngle = new (75, 100);
@@ -278,12 +279,13 @@ namespace PlayerSystems.Modules.MovementModules {
         
         void JumpOut(ref Vector3 currentVelocity) {
             var currentVerticalSpeed = Vector3.Dot(currentVelocity, Player.Motor.CharacterUp);
-            var targetVerticalSpeed = Mathf.Max(currentVerticalSpeed, jumpUpForce);
+            var targetVerticalSpeed = currentVerticalSpeed + jumpUpForce;
             var verticalForce = Player.Motor.CharacterUp * (targetVerticalSpeed - currentVerticalSpeed);
             
             var horizontalForce = wallHit.normal * jumpOutForce;
             
             currentVelocity += verticalForce + horizontalForce;
+            Debug.Log("Jumping out of wall with velocity: " + currentVelocity);
             
             cooldownTimer.Reset(cooldownAfterJump);
             cooldownTimer.Start();

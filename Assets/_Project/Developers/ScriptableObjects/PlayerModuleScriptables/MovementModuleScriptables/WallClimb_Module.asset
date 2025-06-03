@@ -17,15 +17,15 @@ MonoBehaviour:
   wallClimbSpeedScale: 1.5
   wallRunResponse: 20
   wallClimbDuration: 1.5
-  jumpOutForce: 10000
-  jumpUpForce: 10
+  jumpOutForce: 15
+  jumpUpForce: 5
   coyoteTime: 0.2
   minMaxBankAngle: {x: 75, y: 100}
   wallCheckDistance: 1
   wallCheckHeight: 0.25
   minDistanceFromGround: 1
   cooldownAfterDetaching: 0.1
-  cooldownAfterJump: 0.2
+  cooldownAfterJump: 0.5
   cooldownAfterStanceChange: 0.4
   cooldownAfterTimeOut: 0.7
   cooldownOnSimilarWall: 1
