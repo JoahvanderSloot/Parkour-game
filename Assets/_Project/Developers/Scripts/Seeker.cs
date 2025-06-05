@@ -60,8 +60,7 @@ public class Seeker : MonoBehaviour
                 flashLight.transform.rotation = Quaternion.Lerp(flashLight.transform.rotation, targetRotation, Time.deltaTime * 5f);
             }
 
-            transform.position = new Vector3(transform.position.x, player.position.y + 5, transform.position.z);
-
+            SeekerHeight();
             KillPlayer();
             AvoidBuildings();
         }
@@ -118,5 +117,21 @@ public class Seeker : MonoBehaviour
 
             transform.position += _moveDirection.normalized * realSpeed * Time.deltaTime;;
         }
+    }
+
+    private void SeekerHeight()
+    {
+        float _targetY = player.position.y + 5f;
+
+        RaycastHit _hit;
+        Vector3 _rayOrigin = new Vector3(transform.position.x, _targetY, transform.position.z);
+        float _rayDistance = 5f;
+
+        if (Physics.Raycast(_rayOrigin, Vector3.down, out _hit, _rayDistance, obstacleMask))
+        {
+            _targetY = _hit.point.y - 0.1f;
+        }
+
+        transform.position = new Vector3(transform.position.x, Mathf.Min(player.position.y + 5f, _targetY), transform.position.z);
     }
 }

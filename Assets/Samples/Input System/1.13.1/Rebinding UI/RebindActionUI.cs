@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -357,9 +358,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             var actionMap = action?.actionMap ?? obj as InputActionMap;
             var actionAsset = actionMap?.asset ?? obj as InputActionAsset;
 
-            for (var i = 0; i < s_RebindActionUIs.Count; ++i)
+            foreach (var component in s_RebindActionUIs)
             {
-                var component = s_RebindActionUIs[i];
                 var referencedAction = component.actionReference?.action;
                 if (referencedAction == null)
                     continue;
@@ -367,9 +367,12 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 if (referencedAction == action ||
                     referencedAction.actionMap == actionMap ||
                     referencedAction.actionMap?.asset == actionAsset)
+                {
                     component.UpdateBindingDisplay();
+                }
             }
         }
+
 
         [Tooltip("Reference to action that is to be rebound from the UI.")]
         [SerializeField]
@@ -419,14 +422,14 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
         // We want the label for the action name to update in edit mode, too, so
         // we kick that off from here.
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         protected void OnValidate()
         {
             UpdateActionLabel();
             UpdateBindingDisplay();
         }
 
-        #endif
+#endif
 
         private void UpdateActionLabel()
         {
