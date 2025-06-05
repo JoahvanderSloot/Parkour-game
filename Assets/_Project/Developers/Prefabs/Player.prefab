@@ -752,6 +752,7 @@ GameObject:
   - component: {fileID: 478792646506858931}
   - component: {fileID: 1900721668740070094}
   - component: {fileID: 280725057369401760}
+  - component: {fileID: 5915725972410954687}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -816,6 +817,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f86b4776c2001994a907645f19c141c1, type: 2}
   - {fileID: 11400000, guid: 589d5d3c667ac974aa399f1c47f6e317, type: 2}
   - {fileID: 11400000, guid: d5e55f42fae4ad8459e167747e1d5a2c, type: 2}
+  - {fileID: 11400000, guid: d71ccf9930eebef4487b3d12fc0b5193, type: 2}
   effectModules: []
   movementAbilityModule: {fileID: 11400000, guid: 24feeae9a497682439254a910d34d50e, type: 2}
   ultimateAbilityModule: {fileID: 0}
@@ -831,8 +833,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8765b88003b47ee9b11129618b145be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayDistance: 2.5
+  probeDistance: 2.5
   headProbeRadius: 1.75
+--- !u!114 &5915725972410954687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3326903327775133783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 732240f2dd698b8498896dfd36bd5adc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KillTime: 0
+  IsHit: 0
 --- !u!1 &4732503935996445315
 GameObject:
   m_ObjectHideFlags: 0
