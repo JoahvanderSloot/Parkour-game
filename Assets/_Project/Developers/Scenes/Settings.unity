@@ -1761,7 +1761,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1749258203}
   m_Layer: 5
-  m_Name: Keyboard
+  m_Name: Rebinds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
