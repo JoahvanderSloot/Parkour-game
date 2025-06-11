@@ -15,6 +15,7 @@ public class Settings : ScriptableObject
     [Header("Game Settings")]
     public bool Paused;
     public bool GameOver;
+    public float Sensitivity;
     [Header("Game Info")]
     public int Score;
     public int Highscore;
