@@ -24,7 +24,6 @@ namespace PlayerSystems.Modules {
         
         PlayerController playerController;
         
-
         public void InitializeModules(PlayerController player) {
             playerController = player;
             player.Movement.BeforeVelocityUpdate += CheckMovementModuleActivation;

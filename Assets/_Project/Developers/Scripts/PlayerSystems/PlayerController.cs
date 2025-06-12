@@ -40,6 +40,9 @@ namespace PlayerSystems {
         [Space] [SerializeField] PlayerModules playerModules;
         public PlayerModules Modules => playerModules;
         
+        [Space]
+        [SerializeField] PlayerHandsAnimations playerHandsAnimations;
+        
         public KinematicCharacterMotor Motor => playerMovement.GetMotor();
         public PlayerMovement Movement => playerMovement;
 
@@ -76,6 +79,8 @@ namespace PlayerSystems {
             oldInput = PlayerInput.CreateAndInitialize(playerCamera.transform);
 
             playerModules.InitializeModules(this);
+
+            playerHandsAnimations.Initialize(this);
             
             s_ActivePlayer = this;
         }
