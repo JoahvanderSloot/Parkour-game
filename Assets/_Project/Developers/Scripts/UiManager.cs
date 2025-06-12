@@ -56,12 +56,19 @@ public class UiManager : MonoBehaviour
         }
 
         EscMenu.SetActive(gameManager.settings.Paused);
-        timerText.text = gameManager.GameTime.ToString("0.00");
-        scoreText.text = "[" + gameManager.settings.Score.ToString() + "]";
+        timerText.text = gameManager.GameTime.ToString("0;00");
+        if(gameManager.settings.Score == 0)
+        {
+            scoreText.text = "(o)";
+        }
+        else
+        {
+            scoreText.text = "(" + gameManager.settings.Score.ToString() + ")";
+        }
 
         if (hitPoints != null)
         {
-            damageFlashImage.color = new Color(1, 0, 0, alphaValue / 10);
+            damageFlashImage.color = new Color(1, 0, 0, alphaValue / 15);
 
             if (hitPoints.IsHit)
             {
