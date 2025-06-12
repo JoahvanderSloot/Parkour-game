@@ -29,7 +29,8 @@ MonoBehaviour:
   CrosshairIndex: 0
   crosshairColor: {r: 1, g: 1, b: 1, a: 1}
   Paused: 0
-  GameOver: 1
+  GameOver: 0
   Score: 0
   Highscore: 0
   GameTimer: 60
+  CurrentLevelIndex: 0
