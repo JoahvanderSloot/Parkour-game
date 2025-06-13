@@ -25,7 +25,7 @@ namespace PlayerSystems.Interaction {
 
         void HandleInteractionProbing(out Vector3 interactionPoint) {
             var ray = player.MainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-            if (!InteractableProber.Probe(ray, probeDistance, out var interactable, out interactionPoint))
+            if (!InteractableProber.ProbeRay(ray, probeDistance, out var interactable, out interactionPoint))
                 InteractableProber.ProbeAroundPoint(player.MainCamera.transform.position, headProbeRadius, out interactable, out interactionPoint);
 
             HandleInteractableHit(interactable);

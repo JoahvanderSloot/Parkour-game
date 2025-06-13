@@ -12,7 +12,7 @@ namespace PlayerSystems.Interaction {
     public interface IInteractable {
         public const string c_InteractableLayerName = "Interactable";
         public static readonly int InteractableLayer = LayerMask.NameToLayer(c_InteractableLayerName);
-        public static readonly int InteractableLayerMask = 1 << InteractableLayer;
+        public static readonly LayerMask InteractableLayerMask = 1 << InteractableLayer;
         
         /// <summary>
         /// Whether interaction can be performed without looking at the object. (Around the player)
