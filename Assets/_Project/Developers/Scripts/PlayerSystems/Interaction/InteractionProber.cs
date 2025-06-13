@@ -1,20 +1,34 @@
 ﻿using UnityEngine;
 
 namespace PlayerSystems.Interaction {
-    public static class InteractableProber {
+    public static class InteractionProber {
         static readonly Collider[] s_overlapResults = new Collider[5];
+        static readonly RaycastHit[] s_results = new RaycastHit[10];
         static readonly object gate = new ();
 
-        public static bool ProbeRay(Ray ray, float distance, out IInteractable interactable, out Vector3 hitPoint) {
-            interactable = null;
-            hitPoint = Vector3.positiveInfinity;
-            
-            if (Physics.Raycast(ray, out var hit, distance, IInteractable.InteractableLayerMask, QueryTriggerInteraction.Collide)) {
-                hit.collider.TryGetComponent(out interactable);
-                hitPoint = hit.point;
-            }
+        public static bool ProbeRay(Ray ray, out IInteractable interactable, out Vector3 hitPoint) {
+            lock (gate) {
+                interactable = null;
+                hitPoint = Vector3.positiveInfinity;
 
-            return interactable != null;
+                var count = Physics.RaycastNonAlloc(ray, s_results, Mathf.Infinity, IInteractable.InteractableLayerMask,
+                    QueryTriggerInteraction.Collide);
+
+                for (var i = 0; i < count; ++i) {
+                    var result = s_results[i];
+                    if (!result.collider.TryGetComponent(out interactable))
+                        continue;
+                    if (!interactable.CanInteract())
+                        continue;
+                    if (result.distance > interactable.MaxInteractionDistance)
+                        continue;
+
+                    hitPoint = result.point;
+                    return interactable != null;
+                }
+
+                return false;
+            }
         }
 
         public static bool ProbeAroundPoint(Vector3 position, float radius, out IInteractable interactable, out Vector3 hitPoint) {
@@ -27,7 +41,7 @@ namespace PlayerSystems.Interaction {
 
                 for (var i = 0; i < count; i++) {
                     var collider = s_overlapResults[i];
-                    if (!collider || !collider.TryGetComponent(out interactable) || interactable.RequireLook)
+                    if (!collider || !collider.TryGetComponent(out interactable) || interactable.RequireLook || !interactable.CanInteract())
                         continue;
                     
                     var colliderPoint = collider.ClosestPoint(position);
