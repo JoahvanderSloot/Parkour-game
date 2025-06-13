@@ -11,7 +11,8 @@ public class GameManager : MonoBehaviour
     public float GameTime;
     [SerializeField] List<CheckPoint> checkPoints;
 
-    Transform currentCheckP;
+    [Tooltip("This should be empty in all levels exept for the tutorial")]
+    [SerializeField] Transform currentCheckP;
     GameObject navigator;
 
     private void Start()
@@ -23,7 +24,10 @@ public class GameManager : MonoBehaviour
 
         GameObject _playerBody = GameObject.FindGameObjectWithTag("Player");
         player = _playerBody.GetComponentInParent<PlayerController>();
-        checkPoints[Random.Range(0, checkPoints.Count)].isActive = true;
+        if(checkPoints.Count != 0)
+        {
+            checkPoints[Random.Range(0, checkPoints.Count)].isActive = true;
+        }
         player.enabled = true;
 
         navigator = GameObject.FindGameObjectWithTag("Navigator");
@@ -46,8 +50,11 @@ public class GameManager : MonoBehaviour
 
             if (!settings.Paused)
             {
-                GameCountdown();
-                CheckpointHandeling();
+                if(checkPoints.Count > 0)
+                {
+                    GameCountdown();
+                    CheckpointHandeling();
+                }
                 Navigation();
             }
         }
@@ -108,11 +115,16 @@ public class GameManager : MonoBehaviour
 
     private void Navigation()
     {
-        if (Keyboard.current.tabKey.wasPressedThisFrame)
+        if(navigator == null)
+        {
+            navigator = GameObject.FindGameObjectWithTag("Navigator");
+        }
+
+        if (Keyboard.current.tabKey.isPressed)
         {
             navigator.gameObject.SetActive(true);
         }
-        else if (Keyboard.current.tabKey.wasReleasedThisFrame)
+        else
         {
             navigator.gameObject.SetActive(false);
         }

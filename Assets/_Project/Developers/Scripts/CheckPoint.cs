@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CheckPoint : MonoBehaviour
 {
-    [HideInInspector] public bool isActive;
+    public bool isActive;
     [HideInInspector] public bool isPlayerInTrigger;
     [SerializeField] GameObject visualObj;
 

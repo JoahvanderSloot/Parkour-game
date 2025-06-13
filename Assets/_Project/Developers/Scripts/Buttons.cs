@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class Buttons : MonoBehaviour
 {
+    [Header("Only for the StartGame button")]
+    [SerializeField] Settings settings;
+
     public void PointerEnter()
     {
         transform.localScale = new Vector2(1.1f, 1.1f);
@@ -15,7 +18,18 @@ public class Buttons : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("JoahTest");
+        switch (settings.CurrentLevelIndex)
+        {
+            case 0:
+                SceneManager.LoadScene("Tutorial");
+                break;
+            case 1:
+                SceneManager.LoadScene("JoahTest");
+                break;
+            case 2:
+                SceneManager.LoadScene("JoahTest");
+                break;
+        }
     }
 
     public void UnPause()

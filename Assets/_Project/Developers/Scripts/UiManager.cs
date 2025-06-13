@@ -57,14 +57,7 @@ public class UiManager : MonoBehaviour
 
         EscMenu.SetActive(gameManager.settings.Paused);
         timerText.text = gameManager.GameTime.ToString("0;00");
-        if(gameManager.settings.Score == 0)
-        {
-            scoreText.text = "(o)";
-        }
-        else
-        {
-            scoreText.text = "(" + gameManager.settings.Score.ToString() + ")";
-        }
+        scoreText.text = "(" + gameManager.settings.Score.ToString() + ")";
 
         if (hitPoints != null)
         {
