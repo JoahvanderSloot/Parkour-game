@@ -22,7 +22,10 @@ MonoBehaviour:
   coyoteTime: 0.2
   minMaxBankAngle: {x: 75, y: 100}
   wallCheckDistance: 1
-  wallCheckHeight: 0.25
+  wallCheckHeights:
+  - 0.25
+  - 0.5
+  - 0.75
   minDistanceFromGround: 1
   cooldownAfterDetaching: 0.1
   cooldownAfterJump: 0.5

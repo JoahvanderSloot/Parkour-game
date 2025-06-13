@@ -15453,9 +15453,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 946139360998355547, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
+      propertyPath: field of view
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 946139360998355547, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 946139360998355547, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
+      propertyPath: far clip plane
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2896084025891633888, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 96865
+      objectReference: {fileID: 0}
     - target: {fileID: 3326903327775133783, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3423929699413806791, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
+      propertyPath: animationConfig.locomotion.run.clip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725648943801723648, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.033
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725648943801723648, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823215773068421498, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8853775913293271310, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
       propertyPath: m_LocalPosition.x

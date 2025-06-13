@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using ImprovedTimers;
 using PlayerSystems.Input;
 using PlayerSystems.Movement;
@@ -19,7 +20,7 @@ namespace PlayerSystems.Modules.MovementModules {
         [Space]
         [SerializeField] Vector2 minMaxBankAngle = new (75, 100);
         [SerializeField] float wallCheckDistance = 1f;
-        [SerializeField, Range(0,1)] float wallCheckHeight = 0.25f;
+        [SerializeField, Range(0,1)] float[] wallCheckHeights = new[]{ 0.25f };
         [SerializeField] float minDistanceFromGround = 1f;
         [Space]
         [SerializeField] float cooldownAfterDetaching = 0.1f;
@@ -54,8 +55,19 @@ namespace PlayerSystems.Modules.MovementModules {
 
         bool detachFromWall;
         bool jumpRequested;
-        
-        Vector3 WallCheckPosition => Player.Motor.TransientPosition + Player.Motor.CharacterUp * (Player.Height * wallCheckHeight);
+
+        Vector3[] wallCheckPosArray;
+        Vector3[] GetWallCheckPositions() {
+            if (wallCheckPosArray == null || wallCheckPosArray.Length != wallCheckHeights.Length) {
+                wallCheckPosArray = new Vector3[wallCheckHeights.Length];
+            }
+            
+            for (var i = 0; i < wallCheckHeights.Length; i++) {
+                wallCheckPosArray[i] = Player.Motor.TransientPosition + Player.Motor.CharacterUp * (Player.Height * wallCheckHeights[i]);
+            }
+
+            return wallCheckPosArray;
+        }
 
         protected override void Initialize() {
             unUniqueWallAttachmentTimer = new CountdownTimer(cooldownOnSimilarWall);
@@ -178,12 +190,16 @@ namespace PlayerSystems.Modules.MovementModules {
         }
         
         bool CheckForWall() {
-            hasWall = Physics.Raycast(WallCheckPosition, Player.Motor.CharacterForward, out wallHit, wallCheckDistance, wallLayers);
+            hasWall = false;
+            foreach (var wallCheckPosition in GetWallCheckPositions()) {
+                hasWall = Physics.Raycast(wallCheckPosition, Player.Motor.CharacterForward, out wallHit, wallCheckDistance, wallLayers);
+                if (hasWall)
+                    break;
+            }
             
             uniqueWall = previousHit.normal != wallHit.normal || !hasWall;
             previousHit = wallHit;
             
-            DrawDebugLines();
             return hasWall;
         }
         
@@ -292,12 +308,6 @@ namespace PlayerSystems.Modules.MovementModules {
             
             detachFromWall = true;
             jumpRequested = false;
-        }
-        
-        [Conditional("UNITY_EDITOR")]
-        void DrawDebugLines() {
-            Debug.DrawLine(WallCheckPosition, Player.Motor.CharacterRight * wallCheckDistance, Color.blue);
-            Debug.DrawLine(WallCheckPosition, -Player.Motor.CharacterRight * wallCheckDistance, Color.blue);
         }
     }
 }
