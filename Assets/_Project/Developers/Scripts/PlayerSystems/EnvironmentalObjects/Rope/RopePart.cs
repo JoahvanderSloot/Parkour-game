@@ -51,6 +51,10 @@ namespace PlayerSystems.EnvironmentalObjects {
 
         public bool AllowInteraction { get; set; } = true;
         public bool RequireLook => false;
+        public float MaxInteractionDistance => IInteractable.c_DefaultInteractionDistance;
+
+        public bool CanInteract() => AllowInteraction;
+
         public bool OnInteract(PlayerController player, InteractionPhase phase) {
             Debug.Log("RopePart Interacted");
             if (!AllowInteraction)

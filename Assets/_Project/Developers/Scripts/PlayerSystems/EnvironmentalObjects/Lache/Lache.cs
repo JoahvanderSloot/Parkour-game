@@ -36,6 +36,10 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
         }
 
         public bool RequireLook => false;
+        public float MaxInteractionDistance => IInteractable.c_DefaultInteractionDistance;
+
+        public bool CanInteract() => AllowInteraction;
+
         public bool OnInteract(PlayerController player, InteractionPhase phase) {
             if (!AllowInteraction)
                 return false;

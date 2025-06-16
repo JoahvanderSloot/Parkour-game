@@ -15,5 +15,9 @@ namespace PlayerSystems {
         void FixedUpdate() {
             animationSystem?.FixedUpdate();
         }
+
+        void OnDestroy() {
+            animationSystem?.Dispose();
+        }
     }
 }
