@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
@@ -21,43 +22,52 @@ public class UiManager : MonoBehaviour
 
     [Header("Other")]
     [SerializeField] GameObject EscMenu;
-    [SerializeField] GameManager gameManager;
+    public GameManager GameManager;
+    [HideInInspector] public bool IsTutorial;
 
     private void Start()
     {
+        IsTutorial = false;
         hitPoints = GameObject.FindWithTag("Player").GetComponentInParent<HitPoints>();
-        crosshair.sprite = gameManager.settings.Crosshairs[gameManager.settings.CrosshairIndex];
-        crosshair.color = gameManager.settings.crosshairColor;
+        crosshair.sprite = GameManager.settings.Crosshairs[GameManager.settings.CrosshairIndex];
+        crosshair.color = GameManager.settings.crosshairColor;
     }
 
     private void Update()
     {
-        GameOver.SetActive(gameManager.settings.GameOver);
+        GameOver.SetActive(GameManager.settings.GameOver);
 
-        if (gameManager.settings.GameOver)
+        if (GameManager.settings.GameOver)
         {
-            timerText.text = "0.00";
+            timerText.text = "0";
             EscMenu.SetActive(false);
             damageFlashImage.color = new Color(1, 0, 0, 0);
             scoreText.gameObject.SetActive(false);
-            highscoreText.text = "Highscore: " + gameManager.settings.Highscore.ToString("0");
-            finalScore.text = "Score: " + gameManager.settings.Score.ToString("0");
+            highscoreText.text = "Highscore: " + GameManager.settings.Highscore.ToString("0");
+            finalScore.text = "Score: " + GameManager.settings.Score.ToString("0");
 
-            if (gameManager.GameTime == 0)
+            if (!IsTutorial)
             {
-                gameOverText.text = "Times up!";
+                if (GameManager.GameTime == 0)
+                {
+                    gameOverText.text = "Times up!";
+                }
+                else
+                {
+                    gameOverText.text = "Game Over!";
+                }
             }
             else
             {
-                gameOverText.text = "Game Over!";
+                gameOverText.text = "Tutorial Finished!";
             }
 
             return;
         }
 
-        EscMenu.SetActive(gameManager.settings.Paused);
-        timerText.text = gameManager.GameTime.ToString("0;00");
-        scoreText.text = "(" + gameManager.settings.Score.ToString() + ")";
+        EscMenu.SetActive(GameManager.settings.Paused);
+        timerText.text = GameManager.GameTime.ToString("0;00");
+        scoreText.text = "(" + GameManager.settings.Score.ToString() + ")";
 
         if (hitPoints != null)
         {

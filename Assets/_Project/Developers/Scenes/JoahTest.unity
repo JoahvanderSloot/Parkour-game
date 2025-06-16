@@ -901,7 +901,8 @@ MonoBehaviour:
   highscoreText: {fileID: 30452078}
   finalScore: {fileID: 60485897}
   EscMenu: {fileID: 711809426}
-  gameManager: {fileID: 2085717159}
+  GameManager: {fileID: 2085717159}
+  IsTutorial: 0
 --- !u!1 &30452076
 GameObject:
   m_ObjectHideFlags: 0
