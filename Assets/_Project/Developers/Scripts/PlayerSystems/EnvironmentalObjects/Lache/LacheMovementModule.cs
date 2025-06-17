@@ -120,8 +120,6 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
                 default:
                     break;
             }
-            
-            Debug.Log($"InteractInput phase {phase}, interactIsPressed {interactIsPressed}");
         }
 
         void OnJump(ButtonPhase phase) {

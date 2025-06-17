@@ -52,20 +52,16 @@ namespace PlayerSystems.EnvironmentalObjects {
         }
 
         void OnInteract(IInteractable interactable, Vector3 point) {
-            Debug.Log($"interactable {interactable} point {point}");
             if (interactable is RopePart ropePart) {
                 OnInteractWithRopePart(ropePart);
             }
         }
         public void OnInteractWithRopePart(RopePart ropePart) {
-            Debug.Log($"on interact with {ropePart}");
             if (!interactReleasedAfterDetaching)
                 return;
             
             tryingToGrabRopePart = true;
             ropePartToGrab = ropePart;
-            
-            Debug.Log($"Trying to grab {ropePart.name}");
         }
 
         bool CheckForActivation() {
