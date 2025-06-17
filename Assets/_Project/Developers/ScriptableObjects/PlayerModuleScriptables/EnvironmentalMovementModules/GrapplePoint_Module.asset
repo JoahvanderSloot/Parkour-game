@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2721b65f1034ef2ade1193fa22a3b57, type: 3}
+  m_Name: GrapplePoint_Module
+  m_EditorClassIdentifier: 
+  CannotOverride: []
+  cooldownTime: 1
+  grappleSpeed: 2
+  grappleDistanceMultiplier: 1.1
+  ropeSpeed: 100
+  ropeOffset: {x: 0.5, y: -0.5, z: 0}
+  ropeConfig:
+    segmentCount: 50
+    segmentLength: 0.25
+    width: 0.1
+    collisionMask:
+      serializedVersion: 2
+      m_Bits: 0
+    gravityForce: {x: -0, y: 0, z: -0}
+    damping: 0
+    bounceFactor: 0.1
+    physicsIterations: 50
+    collisionIterationInterval: 2
+    maxCollisionCount: 5

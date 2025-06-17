@@ -122,7 +122,7 @@ namespace PlayerSystems.Controls.Weapons.Animations {
 
         void BlendIn(AnimationState locomotionState) {
             if (!locomotionState.Clip) {
-                Debug.LogError($"Locomotion state has no animation clip assigned.");
+                Debug.LogWarning($"Locomotion state has no animation clip assigned.");
                 return;
             }
             
