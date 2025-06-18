@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 3423594710133933963}
   - component: {fileID: 5857804611083572134}
   - component: {fileID: 4937756594736062671}
-  - component: {fileID: 6544219139680527125}
+  - component: {fileID: 3206154517436233996}
+  - component: {fileID: 7279617624571184987}
+  - component: {fileID: 6541305504647433291}
   m_Layer: 0
   m_Name: WallE
   m_TagString: Untagged
@@ -87,8 +89,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6544219139680527125
-MeshCollider:
+--- !u!65 &3206154517436233996
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -105,10 +107,51 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 303825609616886180, guid: 2b4e3641256bc4889b647ec8cdc85b35, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 4, y: 0.6820297, z: 0.9}
+  m_Center: {x: 0, y: 1.1589851, z: 0}
+--- !u!65 &7279617624571184987
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957254986669744265}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.58123875, y: 3, z: 0.9}
+  m_Center: {x: 1.7093806, y: 0, z: 0}
+--- !u!65 &6541305504647433291
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957254986669744265}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.53668404, y: 3, z: 0.9}
+  m_Center: {x: -1.731658, y: 0, z: 0}
 --- !u!1 &7122996836117485199
 GameObject:
   m_ObjectHideFlags: 0
