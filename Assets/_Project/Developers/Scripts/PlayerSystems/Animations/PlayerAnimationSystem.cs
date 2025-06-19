@@ -100,24 +100,19 @@ namespace PlayerSystems.Controls.Weapons.Animations {
             ).OnComplete( this, t => t.DisconnectOneShot());
         }
 
-        async void OneShotEventCallBackTask(OneShotAnimationConfig config, CancellationToken token) {
-            try {
-                while (oneShotPlayable.IsValid() && oneShotPlayable.GetAnimationClip() == config.Clip && !token.IsCancellationRequested) {
-                    var normalizedTime = oneShotPlayable.GetTime() / oneShotPlayable.GetAnimationClip().length;
-                
-                    foreach (var animationEvent in config.AnimationEvents) {
-                        animationEvent.Update((float)normalizedTime, animationGraph.TopLevelMixer.GetInputWeight(1));
-                    }
-
-                    await Awaitable.NextFrameAsync(token);
-                }
+        async Awaitable OneShotEventCallBackTask(OneShotAnimationConfig config, CancellationToken token) {
+            while (oneShotPlayable.IsValid() && oneShotPlayable.GetAnimationClip() == config.Clip && !token.IsCancellationRequested) {
+                var normalizedTime = oneShotPlayable.GetTime() / oneShotPlayable.GetAnimationClip().length;
             
                 foreach (var animationEvent in config.AnimationEvents) {
-                    animationEvent.Reset();
+                    animationEvent.Update((float)normalizedTime, animationGraph.TopLevelMixer.GetInputWeight(1));
                 }
+
+                await Awaitable.NextFrameAsync(token);
             }
-            catch (Exception e) {
-                throw; // TODO handle exception
+        
+            foreach (var animationEvent in config.AnimationEvents) {
+                animationEvent.Reset();
             }
         }
         

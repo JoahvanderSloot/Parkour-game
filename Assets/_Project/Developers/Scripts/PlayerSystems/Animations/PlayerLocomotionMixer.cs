@@ -83,15 +83,25 @@ namespace PlayerSystems.Controls.Weapons.Animations {
                         BlendIn(IdleState);
                 }
             }
-            else if (player.Modules.ActiveModule is WallClimbModule) {
-                BlendIn(WallClimbState);
-            }
-            else {
-                if (currentLocomotionState != AirborneState)
-                    BlendIn(AirborneState);
+            else switch (player.Modules.ActiveModule) {
+                case WallClimbModule: {
+                    if (currentLocomotionState != WallClimbState)
+                        BlendIn(WallClimbState);
+                    break;
+                }
+                case WallRunModule: {
+                    if (currentLocomotionState != RunState)
+                        BlendIn(RunState);
+                    break;
+                }
+                default: {
+                    if (currentLocomotionState != AirborneState)
+                        BlendIn(AirborneState);
+                    break;
+                }
             }
 
-            float animationSpeed = currentLocomotionState.SpeedScaling != 0f
+            var animationSpeed = currentLocomotionState.SpeedScaling != 0f
                 ? normalizedSpeed * currentLocomotionState.SpeedScaling * currentLocomotionState.AnimationSpeed
                 : currentLocomotionState.AnimationSpeed;
             
@@ -135,6 +145,7 @@ namespace PlayerSystems.Controls.Weapons.Animations {
             var runWeight = animationGraph.LocomotionMixer.GetInputWeight(1);
             var slideWeight = animationGraph.LocomotionMixer.GetInputWeight(2);
             var airborneWeight = animationGraph.LocomotionMixer.GetInputWeight(3);
+            var climbWeight = animationGraph.LocomotionMixer.GetInputWeight(4);
             
             var locomotionStateIndex = LocomotionStates.IndexOf(locomotionState);
             var newStateStartWeight = animationGraph.LocomotionMixer.GetInputWeight(locomotionStateIndex);
@@ -145,6 +156,7 @@ namespace PlayerSystems.Controls.Weapons.Animations {
                 animationGraph.LocomotionMixer.SetInputWeight(1, runWeight * (1f - blendInWeight));
                 animationGraph.LocomotionMixer.SetInputWeight(2, slideWeight * (1f - blendInWeight));
                 animationGraph.LocomotionMixer.SetInputWeight(3, airborneWeight * (1f - blendInWeight));
+                animationGraph.LocomotionMixer.SetInputWeight(4, climbWeight * (1f - blendInWeight));
                 
                 animationGraph.LocomotionMixer.SetInputWeight(locomotionStateIndex, Mathf.Lerp(newStateStartWeight, 1f, blendInWeight));
             }, Ease.Linear);
