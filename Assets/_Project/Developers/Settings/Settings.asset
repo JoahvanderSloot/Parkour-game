@@ -32,5 +32,5 @@ MonoBehaviour:
   GameOver: 0
   Score: 0
   Highscore: 0
-  GameTimer: 60
+  GameTimer: 354.2
   CurrentLevelIndex: 0
