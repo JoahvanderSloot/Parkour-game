@@ -12,6 +12,8 @@ namespace PlayerSystems.Controls.Weapons.Animations {
 
         public AnimationClipPlayable oneShotPlayable;
         Sequence oneShotBlendSequence;
+        
+        bool Enabled => animationGraph.PlayableGraph.IsPlaying();
 
         public static PlayerAnimationSystem Create(PlayerAnimationConfig config, PlayerController playerController, string name) {
             name = $"{name}_{Guid.NewGuid().ToString()}";
@@ -151,6 +153,15 @@ namespace PlayerSystems.Controls.Weapons.Animations {
         }
         
         public void FixedUpdate() {
+            if (Time.timeScale == 0f && Enabled)
+                Disable();
+            
+            if (Time.timeScale != 0f && !Enabled)
+                Enable();
+            
+            if (!Enabled)
+                return;
+            
             locomotionMixer.FixedUpdate();
         }
     }
