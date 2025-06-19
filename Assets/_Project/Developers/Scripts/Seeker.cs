@@ -7,6 +7,7 @@ public class Seeker : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float killSpeed;
     float realSpeed;
+    GameManager gameManager;
 
     [Header("Player Detection")]
     [SerializeField] GameObject flashLight;
@@ -20,11 +21,12 @@ public class Seeker : MonoBehaviour
     {
         realSpeed = speed;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        gameManager = FindFirstObjectByType<GameManager>();
     }
 
     private void Update()
     {
-        if (player != null)
+        if (player != null && !gameManager.settings.GameOver)
         {
             Vector3 _targetPosition = player.position;
             _targetPosition.y = transform.position.y;
@@ -33,9 +35,9 @@ public class Seeker : MonoBehaviour
 
             float _distance = Vector3.Distance(transform.position, _targetPosition);
 
-            if (_distance > 5f)
+            if (_distance > 3.5f)
             {
-                realSpeed = speed * 2;
+                realSpeed = speed + _distance;
             }
             else
             {
@@ -58,8 +60,7 @@ public class Seeker : MonoBehaviour
                 flashLight.transform.rotation = Quaternion.Lerp(flashLight.transform.rotation, targetRotation, Time.deltaTime * 5f);
             }
 
-            transform.position = new Vector3(transform.position.x, player.position.y + 5, transform.position.z);
-
+            SeekerHeight();
             KillPlayer();
             AvoidBuildings();
         }
@@ -116,5 +117,21 @@ public class Seeker : MonoBehaviour
 
             transform.position += _moveDirection.normalized * realSpeed * Time.deltaTime;;
         }
+    }
+
+    private void SeekerHeight()
+    {
+        float _targetY = player.position.y + 5f;
+
+        RaycastHit _hit;
+        Vector3 _rayOrigin = new Vector3(transform.position.x, _targetY, transform.position.z);
+        float _rayDistance = 5f;
+
+        if (Physics.Raycast(_rayOrigin, Vector3.down, out _hit, _rayDistance, obstacleMask))
+        {
+            _targetY = _hit.point.y - 0.1f;
+        }
+
+        transform.position = new Vector3(transform.position.x, Mathf.Min(player.position.y + 5f, _targetY), transform.position.z);
     }
 }

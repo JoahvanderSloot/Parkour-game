@@ -2,14 +2,18 @@ using PlayerSystems;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {
+    PlayerController player;
+    
     public Settings settings;
     public float GameTime;
     [SerializeField] List<CheckPoint> checkPoints;
-    PlayerController player;
+
+    [Tooltip("This should be empty in all levels exept for the tutorial")]
+    [SerializeField] Transform currentCheckP;
+    GameObject navigator;
 
     private void Start()
     {
@@ -17,10 +21,17 @@ public class GameManager : MonoBehaviour
         settings.Paused = false;
         settings.Score = 0;
         GameTime = settings.GameTimer;
-        checkPoints[Random.Range(0, checkPoints.Count)].isActive = true;
+
         GameObject _playerBody = GameObject.FindGameObjectWithTag("Player");
         player = _playerBody.GetComponentInParent<PlayerController>();
+        if(checkPoints.Count != 0)
+        {
+            checkPoints[Random.Range(0, checkPoints.Count)].isActive = true;
+        }
         player.enabled = true;
+
+        navigator = GameObject.FindGameObjectWithTag("Navigator");
+        navigator.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -39,8 +50,12 @@ public class GameManager : MonoBehaviour
 
             if (!settings.Paused)
             {
-                GameCountdown();
-                CheckpointHandeling();
+                if(checkPoints.Count > 0)
+                {
+                    GameCountdown();
+                    CheckpointHandeling();
+                }
+                Navigation();
             }
         }
         else
@@ -48,6 +63,7 @@ public class GameManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             player.enabled = false;
+            navigator.SetActive(false);
         }
     }
 
@@ -71,13 +87,18 @@ public class GameManager : MonoBehaviour
 
         foreach (CheckPoint _checkP in checkPoints)
         {
-            if (_checkP.isActive && _checkP.isPlayerInTrigger)
+            if (_checkP.isActive)
             {
-                _checkP.isActive = false;
-                _checkP.isPlayerInTrigger = false;
-                settings.Score++;
-                _completedCheckpoint = _checkP;
-                break;
+                currentCheckP = _checkP.transform;
+
+                if (_checkP.isPlayerInTrigger)
+                {
+                    _checkP.isActive = false;
+                    _checkP.isPlayerInTrigger = false;
+                    settings.Score++;
+                    _completedCheckpoint = _checkP;
+                    break;
+                }
             }
         }
 
@@ -91,4 +112,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    private void Navigation()
+    {
+        if(navigator == null)
+        {
+            navigator = GameObject.FindGameObjectWithTag("Navigator");
+        }
+
+        if (Keyboard.current.tabKey.isPressed)
+        {
+            navigator.gameObject.SetActive(true);
+        }
+        else
+        {
+            navigator.gameObject.SetActive(false);
+        }
+
+        Transform _arrow = navigator.transform.GetChild(0);
+        _arrow.LookAt(currentCheckP);
+    }
 }

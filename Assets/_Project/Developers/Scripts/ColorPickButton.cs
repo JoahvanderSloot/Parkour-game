@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,20 @@ public class ColorPickButton : MonoBehaviour
 
     [SerializeField] private RectTransform cursor;
     [SerializeField] private Image cursorColor;
+
+    [SerializeField] Slider alphaSlider;
+
+    private void Start()
+    {
+        alphaSlider.value = settings.crosshairColor.a;
+    }
+
+    private void Update()
+    {
+        settings.crosshairColor.a = alphaSlider.value;
+        if(crosshairIMG.color != settings.crosshairColor)
+            crosshairIMG.color = settings.crosshairColor;
+    }
 
     public void PickColor()
     {
