@@ -20,7 +20,15 @@ public class GameManager : MonoBehaviour
         settings.GameOver = false;
         settings.Paused = false;
         settings.Score = 0;
-        GameTime = settings.GameTimer;
+
+        if (settings.CurrentLevelIndex == 1)
+        {
+            GameTime = settings.GameTimer * 2;
+        }
+        else
+        {
+            GameTime = settings.GameTimer;
+        }
 
         GameObject _playerBody = GameObject.FindGameObjectWithTag("Player");
         player = _playerBody.GetComponentInParent<PlayerController>();
