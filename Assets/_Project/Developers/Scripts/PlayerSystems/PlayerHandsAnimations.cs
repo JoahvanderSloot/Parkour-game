@@ -42,9 +42,9 @@ namespace PlayerSystems {
         }
 
         void Update() {
-            if (Keyboard.current.tabKey.wasPressedThisFrame) {
-                animationSystem.PlayOneShot(navigatorAnimationConfig);
-            }
+            //if (Keyboard.current.tabKey.wasPressedThisFrame) {
+            //    animationSystem.PlayOneShot(navigatorAnimationConfig);
+            //}
         }
 
         void PlayJumpAnimation() {

@@ -3647,6 +3647,7 @@ MonoBehaviour:
   - {fileID: 1799082940}
   - {fileID: 656910193}
   - {fileID: 1206322357}
+  currentCheckP: {fileID: 0}
 --- !u!1 &80513145
 GameObject:
   m_ObjectHideFlags: 0
@@ -6138,6 +6139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7321c97e9b771cc4f8aea46e80e4f984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settings: {fileID: 0}
 --- !u!114 &348467824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8078,6 +8080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7321c97e9b771cc4f8aea46e80e4f984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settings: {fileID: 0}
 --- !u!114 &439631046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10292,6 +10295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7321c97e9b771cc4f8aea46e80e4f984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settings: {fileID: 0}
 --- !u!114 &619465341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15457,10 +15461,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7778860387660291646, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 3423929699413806791, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
+      propertyPath: animationConfig.locomotion.idle.clip
+      value: 
+      objectReference: {fileID: -203655887218126122, guid: 2403d50cb2de78748827ba77bf48d79f, type: 3}
+    - target: {fileID: 3423929699413806791, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
+      propertyPath: animationConfig.locomotion.airborne.clip
+      value: 
+      objectReference: {fileID: -203655887218126122, guid: 11f2c79685447da48ae5dc69efff44ef, type: 3}
     - target: {fileID: 8853775913293271310, guid: 464e8906f8d066c4ea629268efc9ec0f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -21886,6 +21894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7321c97e9b771cc4f8aea46e80e4f984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settings: {fileID: 0}
 --- !u!114 &1562278413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34783,7 +34792,8 @@ MonoBehaviour:
   highscoreText: {fileID: 0}
   finalScore: {fileID: 0}
   EscMenu: {fileID: 1226642410}
-  gameManager: {fileID: 78161252}
+  GameManager: {fileID: 0}
+  IsTutorial: 0
 --- !u!1 &2101930895
 GameObject:
   m_ObjectHideFlags: 0
