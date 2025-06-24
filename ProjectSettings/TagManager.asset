@@ -6,18 +6,19 @@ TagManager:
   tags:
   - RopePart
   - Lache
+  - Navigator
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - ViewModel
   - Water
   - UI
   - 
   - Player
   - 
   - 
-  - 
+  - Interactable
   - 
   - 
   - 

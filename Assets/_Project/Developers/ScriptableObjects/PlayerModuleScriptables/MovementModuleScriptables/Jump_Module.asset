@@ -16,6 +16,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d5e55f42fae4ad8459e167747e1d5a2c, type: 2}
   - {fileID: 11400000, guid: 589d5d3c667ac974aa399f1c47f6e317, type: 2}
   - {fileID: 11400000, guid: d71ccf9930eebef4487b3d12fc0b5193, type: 2}
+  - {fileID: 11400000, guid: f88d1e8a8259fda4bbc5af8f67f2b021, type: 2}
   jumpStrength: 10
   coyoteTime: 0.15
   jumpBuffer: 0.15

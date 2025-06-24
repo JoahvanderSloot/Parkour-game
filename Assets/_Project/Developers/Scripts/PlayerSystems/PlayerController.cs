@@ -1,6 +1,7 @@
 using System;
 using KinematicCharacterController;
 using PlayerSystems.Input;
+using PlayerSystems.Interaction;
 using PlayerSystems.Modules;
 using PlayerSystems.Movement;
 using PlayerSystems.Movement.CameraEffects;
@@ -31,10 +32,16 @@ namespace PlayerSystems {
         //private InteractionSystem.InteractionHandler interactionHandler;
         private PlayerInput oldInput;
         
+        [SerializeField] InteractionHandler interactionHandler;
+        public InteractionHandler InteractionHandler => interactionHandler;
+        
         [SerializeField] GameplayInputReader gameplayInputReader;
         public GameplayInputReader GameplayInput => gameplayInputReader;
         [Space] [SerializeField] PlayerModules playerModules;
         public PlayerModules Modules => playerModules;
+        
+        [Space]
+        [SerializeField] PlayerHandsAnimations playerHandsAnimations;
         
         public KinematicCharacterMotor Motor => playerMovement.GetMotor();
         public PlayerMovement Movement => playerMovement;
@@ -66,11 +73,14 @@ namespace PlayerSystems {
             playerMovement.Initialize(this);
             playerCamera.Initialize(playerMovement.GetCameraTarget(), this);
             playerFX.Initialize(this, mainCamera);
+            interactionHandler.Initialize(this);
 
             MainCamera.gameObject.SetActive(true);
             oldInput = PlayerInput.CreateAndInitialize(playerCamera.transform);
 
             playerModules.InitializeModules(this);
+
+            playerHandsAnimations.Initialize(this);
             
             s_ActivePlayer = this;
         }

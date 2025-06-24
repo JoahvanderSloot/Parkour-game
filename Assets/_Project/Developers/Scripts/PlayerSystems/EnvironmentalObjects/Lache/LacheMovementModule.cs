@@ -1,5 +1,6 @@
 ﻿using Extensions;
 using PlayerSystems.Input;
+using PlayerSystems.Interaction;
 using PlayerSystems.Modules;
 using PrimeTween;
 using UnityEngine;
@@ -7,13 +8,9 @@ using UnityEngine;
 namespace PlayerSystems.EnvironmentalObjects.Lache {
     [CreateAssetMenu(fileName = "LacheMovementModule", menuName = "Player/Modules/Environmental/LacheModule", order = 0)]
     public class LacheMovementModule : MovementModule {
-        [Header("Interaction")]
-        [SerializeField] float checkDistance = 2f;
-        [SerializeField] float checkRadius = 0.5f;
-        [SerializeField] LayerMask lacheLayerMask;
-        
         [Header("Attachment")] 
         [SerializeField] float initialForceMultiplier = 25f;
+        [SerializeField] float lacheCooldown = 0.1f;
         
         [Header("Detachment")]
         [SerializeField] float detachForceMultiplier = 100f;
@@ -65,26 +62,64 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
 
         Vector3 positionOffset;
 
+        bool tryingToGrabLache;
+        Lache lacheToGrab;
+        Vector3 pointToGrab;
+
+        bool interactReleasedAfterDetaching;
+
         public override ModuleLevel ModuleLevel => ModuleLevel.ManualActivationModule;
-        public override bool ShouldActivate => TryingToGrabLache() && CheckForLache();
+        public override bool ShouldActivate => CheckForActivation();
 
         public override void ModuleUpdate() { }
 
         protected override void Initialize() {
-            Input.Interact += OnInteractPressed;
+            Player.InteractionHandler.OnInteract += OnInteract;
+            Input.Interact += OnInteractInput;
         }
 
         void OnDisable() {
             if (Application.isPlaying && Player != null) {
-                Input.Interact -= OnInteractPressed;
+                Player.InteractionHandler.OnInteract -= OnInteract;
+                Input.Interact -= OnInteractInput;
             }
         }
 
-        void OnInteractPressed() {
-            if (attached)
-                shouldDetach = true;
-            else
-                interactWasPressed = true;
+        void OnInteract(IInteractable interactable, Vector3 point) {
+            if (interactable is Lache lache) {
+                OnInteractWithLache(lache, point);
+            }
+        }
+        public void OnInteractWithLache(Lache lache, Vector3 point) {
+            if (!interactReleasedAfterDetaching)
+                return;
+            
+            tryingToGrabLache = true;
+            lacheToGrab = lache;
+            pointToGrab = point;
+            
+            Debug.Log($"Trying to grab {lache.name} at {point}");
+        }
+
+        bool CheckForActivation() {
+            var activate = tryingToGrabLache;
+            tryingToGrabLache = false;
+            return activate;
+        }
+
+        void OnInteractInput(ButtonPhase phase) {
+            switch (phase) {
+                case ButtonPhase.Pressed:
+                    interactIsPressed = true;
+                    if (attached) shouldDetach = true;
+                    break;
+                case ButtonPhase.Released:
+                    interactReleasedAfterDetaching = true;
+                    interactIsPressed = false;
+                    break;
+                default:
+                    break;
+            }
         }
 
         void OnJump(ButtonPhase phase) {
@@ -93,41 +128,19 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
             }
         }
 
-        bool TryingToGrabLache() {
-            if (!interactWasPressed)
-                return false;
-
-            interactWasPressed = false;
-            return true;
-        }
-
-        bool CheckForLache() {
-            var gotHit = Physics.SphereCast(
-                Player.MainCamera.transform.position,
-                checkRadius,
-                Player.MainCamera.transform.forward,
-                out latestHit,
-                checkDistance,
-                lacheLayerMask,
-                QueryTriggerInteraction.Collide
-            );
-
-            return gotHit && latestHit.collider.CompareTag(Lache.c_LacheTag);
-        }
-
         public override void EnableModule() {
             base.EnableModule();
 
-            shouldDetach = false;
-            Player.Motor.SetGroundSolvingActivation(false);
-
-            if (!latestHit.collider.TryGetComponent(out attachedLache)) {
+            if (!lacheToGrab) {
                 Debug.LogError("No lache found");
                 DisableModule();
                 return;
             }
+            
+            shouldDetach = false;
+            Player.Motor.SetGroundSolvingActivation(false);
 
-            attachmentPoint = attachedLache.GetAttachmentPoint(latestHit.point);
+            lacheToGrab.AllowInteraction = false;
             jumpRequested = false;
 
             Player.Movement.VelocityUpdate += MoveOnLache;
@@ -136,7 +149,9 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
 
         public override void DisableModule() {
             base.DisableModule();
-
+            
+            Player.Movement.InvokeOnResetJumps();
+            
             shouldDetach = false;
             Player.Motor.SetGroundSolvingActivation(true);
 
@@ -145,16 +160,18 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
 
             if (attached)
                 DetachFromLache();
-
-            attachedLache = null;
         }
 
         void AttachToLache(Lache lache, Vector3 currentVelocity, out float initialForce) {
+            Debug.Log($"Attaching to lache {lache.name}");
             initialForce = 0f;
 
             if (attached)
                 return;
 
+            attachedLache = lache;
+            attachmentPoint = lache.GetAttachmentPoint(pointToGrab);
+            Debug.Log($"Attachment point {attachmentPoint}");
             attached = true;
 
             var barDirection = lache.BarDirection;
@@ -216,10 +233,18 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
 
         void DetachFromLache() {
             attached = false;
+            
+            if (interactIsPressed)
+                interactReleasedAfterDetaching = false;
+            
+            //Tween.Delay(attachedLache, lacheCooldown, lache => lache.AllowInteraction = true);
+            attachedLache.AllowInteraction = true;
+            attachedLache = null;
             DisableModule();
         }
 
         void JumpOffLache(ref Vector3 currentVelocity) {
+            Debug.Log("JUMPPING OFF LACHE");
             DetachFromLache();
 
             jumpRequested = false;
@@ -246,7 +271,7 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
             var forceToAdd = 0f;
 
             if (!attached) {
-                AttachToLache(attachedLache, currentVelocity, out var initialForce);
+                AttachToLache(lacheToGrab, currentVelocity, out var initialForce);
                 forceToAdd += initialForce;
             }
 

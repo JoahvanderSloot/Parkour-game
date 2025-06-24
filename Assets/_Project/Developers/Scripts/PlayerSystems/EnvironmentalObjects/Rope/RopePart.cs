@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using ImprovedTimers;
+using PlayerSystems.Interaction;
 using UnityEngine;
 
 namespace PlayerSystems.EnvironmentalObjects {
-    public class RopePart : MonoBehaviour {
+    public class RopePart : MonoBehaviour, IInteractable {
         public RopeVerlet RopeVerlet { get; private set; }
         public int Index { get; private set; }
 
@@ -46,6 +47,29 @@ namespace PlayerSystems.EnvironmentalObjects {
         
         public void AddForce(Vector3 force, int updateSpread = 5) {
             forcesToApply.Add((force, updateSpread, 0));
+        }
+
+        public bool AllowInteraction { get; set; } = true;
+        public bool RequireLook => false;
+        public float MaxInteractionDistance => IInteractable.c_DefaultInteractionDistance;
+
+        public bool CanInteract() => AllowInteraction;
+
+        public bool OnInteract(PlayerController player, InteractionPhase phase) {
+            Debug.Log("RopePart Interacted");
+            if (!AllowInteraction)
+                return false;
+            
+            if (phase is InteractionPhase.Released)
+                return false;
+            
+            return true;
+        }
+        public void OnHoverEnter() {
+            
+        }
+        public void OnHoverExit() {
+            
         }
     }
 }

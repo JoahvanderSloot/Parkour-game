@@ -19,4 +19,5 @@ public class Settings : ScriptableObject
     public int Score;
     public int Highscore;
     public float GameTimer;
+    public int CurrentLevelIndex;
 }

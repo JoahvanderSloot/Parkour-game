@@ -1,8 +1,7 @@
-﻿using System;
-using Extensions;
+﻿using Extensions;
 using PlayerSystems.Input;
+using PlayerSystems.Interaction;
 using PlayerSystems.Modules;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace PlayerSystems.EnvironmentalObjects {
@@ -25,61 +24,69 @@ namespace PlayerSystems.EnvironmentalObjects {
         [SerializeField] int forceUpdateSpread = 5;
         [Space]
         [SerializeField] float ropeClingResponse = 10f;
-
-        bool interactWasPressed;
-        RaycastHit latestHit;
-        RopePart ropePart;
+        
         bool attached;
+        RopePart attachedRopePart;
 
-        Vector3 previousDirection;
         float accelerationBooster;
         float directionSimilarityFactor;
 
         bool interactIsPressed;
         bool jumpRequested;
         
+        bool interactReleasedAfterDetaching;
+        
+        bool tryingToGrabRopePart;
+        RopePart ropePartToGrab;
+        
         protected override void Initialize() {
-           Input.Interact += OnInteractPressed;
+            Player.InteractionHandler.OnInteract += OnInteract;
+            Input.Interact += OnInteractInput;
         }
 
         void OnDisable() {
             if (Application.isPlaying && Player != null) {
-                Input.Interact -= OnInteractPressed;
+                Player.InteractionHandler.OnInteract -= OnInteract;
+                Input.Interact -= OnInteractInput;
+            }
+        }
+
+        void OnInteract(IInteractable interactable, Vector3 point) {
+            if (interactable is RopePart ropePart) {
+                OnInteractWithRopePart(ropePart);
+            }
+        }
+        public void OnInteractWithRopePart(RopePart ropePart) {
+            if (!interactReleasedAfterDetaching)
+                return;
+            
+            tryingToGrabRopePart = true;
+            ropePartToGrab = ropePart;
+        }
+
+        bool CheckForActivation() {
+            var activate = tryingToGrabRopePart;
+            tryingToGrabRopePart = false;
+            return activate;
+        }
+
+        void OnInteractInput(ButtonPhase phase) {
+            switch (phase) {
+                case ButtonPhase.Pressed:
+                    interactIsPressed = true;
+                    if (attached) DetachFromRope();
+                    break;
+                case ButtonPhase.Released:
+                    interactIsPressed = false;
+                    interactReleasedAfterDetaching = true;
+                    break;
+                default:
+                    break;
             }
         }
 
         public override ModuleLevel ModuleLevel => ModuleLevel.ManualActivationModule;
-        public override bool ShouldActivate => TryingToGrabRope() && CheckForRope();
-
-        bool CheckForRope() {
-            var gotHit = Physics.SphereCast(
-                Player.MainCamera.transform.position,
-                ropeCheckRadius,
-                Player.MainCamera.transform.forward,
-                out latestHit,
-                ropeCheckDistance,
-                ropeLayerMask,
-                QueryTriggerInteraction.Collide
-            );
-
-            // ReSharper disable once Unity.UnknownTag
-            return gotHit && latestHit.collider.CompareTag(Rope.c_RopePartTag);
-        }
-        
-        bool TryingToGrabRope() {
-            if (!interactWasPressed)
-                return false;
-            
-            interactWasPressed = false;
-            return true;
-        }
-
-        void OnInteractPressed() {
-            if (attached)
-                DetachFromRope();
-            else
-                interactWasPressed = true;
-        }
+        public override bool ShouldActivate => CheckForActivation();
 
         void OnJump(ButtonPhase phase) {
             if (phase is ButtonPhase.Pressed && attached) {
@@ -88,7 +95,7 @@ namespace PlayerSystems.EnvironmentalObjects {
         }
         
         public override void ModuleUpdate() {
-            interactIsPressed = Input.InteractPressed;
+            //interactIsPressed = Input.InteractPressed;
         }
 
         public override void EnableModule() {
@@ -96,7 +103,7 @@ namespace PlayerSystems.EnvironmentalObjects {
             
             Player.Motor.SetGroundSolvingActivation(false);
             
-            if (!latestHit.collider.TryGetComponent(out ropePart)) {
+            if (!ropePartToGrab) {
                 Debug.LogError("No rope part found");
                 DisableModule();
                 return;
@@ -112,14 +119,14 @@ namespace PlayerSystems.EnvironmentalObjects {
         public override void DisableModule() {
             base.DisableModule();
             
+            Player.Movement.InvokeOnResetJumps();
+            
             Player.Motor.SetGroundSolvingActivation(true);
             
             Player.Movement.VelocityUpdate -= MoveOnRope;
             
             if (attached)
                 DetachFromRope();
-            
-            ropePart = null;
         }
 
         void AttachToRope(RopePart ropePart, Vector3 currentVelocity) {
@@ -127,12 +134,18 @@ namespace PlayerSystems.EnvironmentalObjects {
                 return;
             
             attached = true;
+            attachedRopePart = ropePart;
             ropePart.AddForce(currentVelocity * initialForceMultiplier);
         }
         
         void DetachFromRope() {
             attached = false;
-            ropePart.RopeVerlet.ResetGravity();
+            
+            if (interactIsPressed)
+                interactReleasedAfterDetaching = false;
+            
+            attachedRopePart.RopeVerlet.ResetGravity();
+            attachedRopePart = null;
             DisableModule();
         }
 
@@ -156,27 +169,27 @@ namespace PlayerSystems.EnvironmentalObjects {
         
         public void MoveOnRope(ref Vector3 currentVelocity, float deltaTime) {
             if (!attached)
-                AttachToRope(ropePart, currentVelocity);
+                AttachToRope(ropePartToGrab, currentVelocity);
 
             if (jumpRequested) {
                 JumpOffRope(ref currentVelocity);
                 return;
             }
             
-            ropePart.RopeVerlet.SetGravityDirection(-Player.Motor.CharacterUp);
+            attachedRopePart.RopeVerlet.SetGravityDirection(-Player.Motor.CharacterUp);
             
             var currentSpeed = currentVelocity.magnitude;
-            var ropeVelocity = ropePart.Velocity;
+            var ropeVelocity = attachedRopePart.Velocity;
             currentVelocity = Vector3.zero;
             
             // Add velocity to the rope part
-            var directionToTopOfRope = (ropePart.RopeVerlet.StartPoint - ropePart.CurrentPosition).normalized;
+            var directionToTopOfRope = (attachedRopePart.RopeVerlet.StartPoint - attachedRopePart.CurrentPosition).normalized;
             var movementDirection = Player.Motor.GetDirectionTangentToSurface(
                 direction: RequestedMovement,
                 surfaceNormal: directionToTopOfRope
             ) * RequestedMovement.magnitude;
             
-            Debug.DrawRay(ropePart.CurrentPosition, directionToTopOfRope * 5, Color.red, 0.1f);
+            Debug.DrawRay(attachedRopePart.CurrentPosition, directionToTopOfRope * 5, Color.red, 0.1f);
 
             if (movementDirection != Vector3.zero) {
                 var upwardsDot = Vector3.Dot(ropeVelocity.normalized, Player.Motor.CharacterUp);
@@ -194,13 +207,11 @@ namespace PlayerSystems.EnvironmentalObjects {
                 accelerationBooster = Mathf.Max(accelerationBooster, 0f);
 
                 var accelerationToApply = Mathf.Max(Mathf.Min(acceleration * accelerationBooster, maximumAcceleration), minimumAcceleration);
-                ropePart.AddForce(movementDirection * (accelerationToApply * accelerationMultiplier), forceUpdateSpread);
+                attachedRopePart.AddForce(movementDirection * (accelerationToApply * accelerationMultiplier), forceUpdateSpread);
             }
-            
-            previousDirection = movementDirection;
 
             // Cling to the rope
-            var targetPosition = ropePart.CurrentPosition;
+            var targetPosition = attachedRopePart.CurrentPosition;
             var lerpedPosition = Vector3.Lerp(
                 Player.Motor.TransientPosition,
                 targetPosition,

@@ -9,40 +9,53 @@ namespace PlayerSystems.Modules.MovementModules {
         [SerializeField] float coyoteTime = 0.15f;
         [SerializeField] float jumpBuffer = 0.15f;
         [SerializeField] int airJumps = 1;
-        [Range(0,1)]
-        [SerializeField] float jumpSustainGravity = 0.5f;
-        
+        [Range(0, 1)] [SerializeField] float jumpSustainGravity = 0.5f;
+
         public float JumpSustainGravity => jumpSustainGravity;
-        
+
         int airJumpsLeft;
         bool requestedJump;
-        
+        bool allowJump = true;
+
         CountdownTimer jumpBufferTimer;
 
         protected override void Initialize() {
+            allowJump = true;
             Input.Jump += HandleJumpInput;
             Player.Movement.OnResetJumps += ResetJumps;
+
             jumpBufferTimer = new CountdownTimer(jumpBuffer);
-            
+
             jumpBufferTimer.OnTimerStop += () => requestedJump = false;
         }
+
         void OnDisable() {
             if (Application.isPlaying && Player != null) {
                 Input.Jump -= HandleJumpInput;
                 Player.Movement.OnResetJumps -= ResetJumps;
+
                 jumpBufferTimer.Dispose();
             }
         }
-        
+
         void HandleJumpInput(ButtonPhase phase) {
-            if (Player.Movement.OnWall) // TODO: this shit is stupid just use override restrictions
+            if (phase is not ButtonPhase.Pressed)
                 return;
-            
-            if (phase == ButtonPhase.Pressed) {
-                requestedJump = true;
-                jumpBufferTimer.Reset(jumpBuffer);
-                jumpBufferTimer.Start();
-            }
+
+            if (!CanRequestJump())
+                return;
+
+            requestedJump = true;
+            jumpBufferTimer.Reset(jumpBuffer);
+            jumpBufferTimer.Start();
+        }
+
+        bool CanRequestJump() {
+            if (Player.Modules.ActiveModule is null)
+                return true;
+
+            return Player.Modules.ActiveModule is MovementModule activeMovementModule
+                   && CanOverride(activeMovementModule);
         }
 
         public override ModuleLevel ModuleLevel => ModuleLevel.ManualActivationModule;
@@ -54,33 +67,33 @@ namespace PlayerSystems.Modules.MovementModules {
 
         bool CanJump() {
             var grounded = Player.Motor.GroundingStatus.IsStableOnGround;
-            var canCoyoteJump = Player.Movement.TimeSinceUngrounded < coyoteTime && !Player.Movement.UngroundedDueToJump;
+            var canCoyoteJump = Player.Movement.TimeSinceUngrounded < coyoteTime &&
+                                !Player.Movement.UngroundedDueToJump;
             return airJumpsLeft > 0 || grounded || canCoyoteJump;
         }
 
-        public override void ModuleUpdate() {
-            
-        }
+        public override void ModuleUpdate() { }
 
         public override void EnableModule() {
             base.EnableModule();
             Player.Movement.VelocityUpdate += Jump;
         }
-        
+
         public override void DisableModule() {
             base.DisableModule();
-            
+
             Player.Movement.VelocityUpdate -= Jump;
         }
 
         void ResetJumps() {
             airJumpsLeft = airJumps;
         }
-        
+
         // ReSharper disable Unity.PerformanceAnalysis
         void Jump(ref Vector3 currentVelocity, float deltaTime) {
             var grounded = Player.Motor.GroundingStatus.IsStableOnGround;
-            var canCoyoteJump = Player.Movement.TimeSinceUngrounded < coyoteTime && !Player.Movement.UngroundedDueToJump;
+            var canCoyoteJump = Player.Movement.TimeSinceUngrounded < coyoteTime &&
+                                !Player.Movement.UngroundedDueToJump;
 
             if (grounded || canCoyoteJump) {
                 airJumpsLeft = airJumps;
@@ -100,11 +113,11 @@ namespace PlayerSystems.Modules.MovementModules {
             }
 
             return;
-            
+
             void DoJump(ref Vector3 currentVelocity, bool wasGrounded) {
                 requestedJump = false;
                 jumpBufferTimer.Stop();
-                
+
                 // requestedCrouch = false;
                 // _requestedCrouchInAir = false;
                 // _requireNewCrouchInput = true;
@@ -114,8 +127,8 @@ namespace PlayerSystems.Modules.MovementModules {
                 var targetVerticalSpeed = Mathf.Max(currentVerticalSpeed, jumpStrength);
                 // Add jump speed to the velocity
                 currentVelocity += Player.Motor.CharacterUp * (targetVerticalSpeed - currentVerticalSpeed);
-                
-                
+
+
                 DisableModule();
             }
         }

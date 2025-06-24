@@ -30,10 +30,13 @@ namespace PlayerSystems.EnvironmentalObjects {
 
         public int PhysicsIterations => config.physicsIterations;
         public int CollisionIterationInterval => config.collisionIterationInterval;
+
+        readonly bool collisionCheck;
         
-        public RopeVerlet(RopeConfig config, Vector3 startPoint) {
+        public RopeVerlet(RopeConfig config, Vector3 startPoint, bool collisionCheck = true) {
             this.config = config;
             StartPoint = startPoint;
+            this.collisionCheck = collisionCheck;
             
             Segments = new RopeSegment[SegmentCount];
             for (int i = 0; i < SegmentCount; i++) {
@@ -88,8 +91,8 @@ namespace PlayerSystems.EnvironmentalObjects {
             
             for (int i = 0; i < PhysicsIterations; i++) {
                 ApplyConstraints();
-
-                if (i % CollisionIterationInterval == 0) {
+                
+                if (collisionCheck && i % CollisionIterationInterval == 0) {
                     HandleCollisions();
                 }
             }

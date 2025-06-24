@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
 using KinematicCharacterController;
+using PlayerSystems.Interaction;
 using UnityEngine;
 
 namespace PlayerSystems.EnvironmentalObjects {
     [RequireComponent(typeof(LineRenderer))]
     [ExecuteAlways]
-    public class Rope : MonoBehaviour {
+    public class InteractableRope : MonoBehaviour {
         public const string c_RopePartTag = "RopePart";
         
         [SerializeField] Transform startPointTransform;
@@ -19,7 +20,7 @@ namespace PlayerSystems.EnvironmentalObjects {
         
         [SerializeField, ReadOnly] RopePart[] ropeParts;
 
-        public static implicit operator RopeVerlet(Rope rope) => rope.ropeVerlet;
+        public static implicit operator RopeVerlet(InteractableRope interactableRope) => interactableRope.ropeVerlet;
         
         void Start() {
             if (!Application.isPlaying)
@@ -33,10 +34,10 @@ namespace PlayerSystems.EnvironmentalObjects {
             segmentPositions = new Vector3[ropeVerlet.Segments.Length];
             lineRenderer.positionCount = segmentPositions.Length;
             
-            CreateColliders();
+            CreateRopeParts();
         }
 
-        void CreateColliders() {
+        void CreateRopeParts() {
             if (ropeParts != null)
                 DestroyRopeParts();
             
@@ -46,7 +47,8 @@ namespace PlayerSystems.EnvironmentalObjects {
                     transform = {
                         parent = transform
                     },
-                    tag = c_RopePartTag
+                    tag = c_RopePartTag,
+                    layer = IInteractable.InteractableLayer
                 };
                 
                 var ropePart = colliderObject.AddComponent<RopePart>();
