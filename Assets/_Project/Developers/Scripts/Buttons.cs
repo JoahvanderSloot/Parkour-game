@@ -24,10 +24,10 @@ public class Buttons : MonoBehaviour
                 SceneManager.LoadScene("Tutorial");
                 break;
             case 1:
-                SceneManager.LoadScene("JoahTest");
+                SceneManager.LoadScene("Level1");
                 break;
             case 2:
-                SceneManager.LoadScene("JoahTest");
+                SceneManager.LoadScene("Level2");
                 break;
         }
     }

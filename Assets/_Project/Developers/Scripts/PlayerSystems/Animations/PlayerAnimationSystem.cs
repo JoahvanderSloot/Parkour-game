@@ -12,6 +12,8 @@ namespace PlayerSystems.Controls.Weapons.Animations {
 
         public AnimationClipPlayable oneShotPlayable;
         Sequence oneShotBlendSequence;
+        
+        bool Enabled => animationGraph.PlayableGraph.IsPlaying();
 
         public static PlayerAnimationSystem Create(PlayerAnimationConfig config, PlayerController playerController, string name) {
             name = $"{name}_{Guid.NewGuid().ToString()}";
@@ -100,24 +102,19 @@ namespace PlayerSystems.Controls.Weapons.Animations {
             ).OnComplete( this, t => t.DisconnectOneShot());
         }
 
-        async void OneShotEventCallBackTask(OneShotAnimationConfig config, CancellationToken token) {
-            try {
-                while (oneShotPlayable.IsValid() && oneShotPlayable.GetAnimationClip() == config.Clip && !token.IsCancellationRequested) {
-                    var normalizedTime = oneShotPlayable.GetTime() / oneShotPlayable.GetAnimationClip().length;
-                
-                    foreach (var animationEvent in config.AnimationEvents) {
-                        animationEvent.Update((float)normalizedTime, animationGraph.TopLevelMixer.GetInputWeight(1));
-                    }
-
-                    await Awaitable.NextFrameAsync(token);
-                }
+        async Awaitable OneShotEventCallBackTask(OneShotAnimationConfig config, CancellationToken token) {
+            while (oneShotPlayable.IsValid() && oneShotPlayable.GetAnimationClip() == config.Clip && !token.IsCancellationRequested) {
+                var normalizedTime = oneShotPlayable.GetTime() / oneShotPlayable.GetAnimationClip().length;
             
                 foreach (var animationEvent in config.AnimationEvents) {
-                    animationEvent.Reset();
+                    animationEvent.Update((float)normalizedTime, animationGraph.TopLevelMixer.GetInputWeight(1));
                 }
+
+                await Awaitable.NextFrameAsync(token);
             }
-            catch (Exception e) {
-                throw; // TODO handle exception
+        
+            foreach (var animationEvent in config.AnimationEvents) {
+                animationEvent.Reset();
             }
         }
         
@@ -156,6 +153,15 @@ namespace PlayerSystems.Controls.Weapons.Animations {
         }
         
         public void FixedUpdate() {
+            if (Time.timeScale == 0f && Enabled)
+                Disable();
+            
+            if (Time.timeScale != 0f && !Enabled)
+                Enable();
+            
+            if (!Enabled)
+                return;
+            
             locomotionMixer.FixedUpdate();
         }
     }

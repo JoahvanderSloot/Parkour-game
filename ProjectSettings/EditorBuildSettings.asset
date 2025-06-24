@@ -15,8 +15,11 @@ EditorBuildSettings:
     path: Assets/_Project/Developers/Scenes/Tutorial.unity
     guid: 8b2ccaadd27b41f409659c976304cf4a
   - enabled: 1
-    path: Assets/_Project/Developers/Scenes/JoahTest.unity
+    path: Assets/_Project/Developers/Scenes/Level1.unity
     guid: 53772cb1eeb4a294196a9d0328b66e97
+  - enabled: 1
+    path: Assets/_Project/Developers/Scenes/Level2.unity
+    guid: 7249b165fb2ef744eb04e167771113b2
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
