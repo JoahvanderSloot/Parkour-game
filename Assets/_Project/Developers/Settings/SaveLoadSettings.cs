@@ -1,11 +1,23 @@
 using System.IO;
+using TMPro;
 using UnityEngine;
 
 public class SaveLoadSettings : MonoBehaviour
 {
     public Settings settings;
+    [SerializeField] TextMeshProUGUI highscoreText;
 
     private string SavePath => Path.Combine(Application.persistentDataPath, "playerData.json");
+
+    private void Start()
+    {
+        if(settings.IsLaunched == false)
+        {
+            Load();
+            settings.IsLaunched = true;
+        }
+        highscoreText.text = "Highscore: " + settings.Highscore.ToString();
+    }
 
     [ContextMenu("Save Data")]
     public void Save()
@@ -28,5 +40,22 @@ public class SaveLoadSettings : MonoBehaviour
         {
             Debug.LogWarning("No save file found at " + SavePath);
         }
+    }
+
+    public void QuitGame()
+    {
+        settings.IsLaunched = false;
+        Save();
+
+        #if (UNITY_EDITOR || DEVELOPMENT_BUILD)
+            Debug.Log(this.name + " : " + this.GetType() + " : " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+        #endif
+        #if (UNITY_EDITOR)
+            UnityEditor.EditorApplication.isPlaying = false;
+        #elif (UNITY_STANDALONE)
+             Application.Quit();
+        #elif (UNITY_WEBGL)
+             Application.OpenURL("itch url ");
+        #endif
     }
 }

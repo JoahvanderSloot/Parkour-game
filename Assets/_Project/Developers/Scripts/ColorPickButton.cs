@@ -15,16 +15,22 @@ public class ColorPickButton : MonoBehaviour
 
     [SerializeField] Slider alphaSlider;
 
+    [SerializeField] Slider sizeSlider;
+
     private void Start()
     {
-        alphaSlider.value = settings.crosshairColor.a;
+        alphaSlider.value = settings.CrosshairColor.a;
+        sizeSlider.value = settings.CrosshairSize;
     }
 
     private void Update()
     {
-        settings.crosshairColor.a = alphaSlider.value;
-        if(crosshairIMG.color != settings.crosshairColor)
-            crosshairIMG.color = settings.crosshairColor;
+        settings.CrosshairColor.a = alphaSlider.value;
+        settings.CrosshairSize = sizeSlider.value;
+        if (crosshairIMG.color != settings.CrosshairColor)
+            crosshairIMG.color = settings.CrosshairColor;
+
+        crosshairIMG.gameObject.transform.localScale = new Vector3(settings.CrosshairSize, settings.CrosshairSize, settings.CrosshairSize);
     }
 
     public void PickColor()
@@ -49,7 +55,7 @@ public class ColorPickButton : MonoBehaviour
         Color _pickedColor = colorChart.GetPixel(_texX, _texY);
 
         cursorColor.color = _pickedColor;
-        settings.crosshairColor = _pickedColor;
+        settings.CrosshairColor = _pickedColor;
         crosshairIMG.color = _pickedColor;
     }
 }

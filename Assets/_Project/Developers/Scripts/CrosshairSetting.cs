@@ -6,13 +6,12 @@ using UnityEngine.UI;
 public class CrosshairSetting : MonoBehaviour
 {
     [SerializeField] Settings settings;
-    Image image;
+    [SerializeField] Image image;
 
     private void Start()
     {
-        image = GetComponent<Image>();
         image.sprite = settings.Crosshairs[settings.CrosshairIndex];
-        image.color = settings.crosshairColor;
+        image.color = settings.CrosshairColor;
     }
 
     public void Next()

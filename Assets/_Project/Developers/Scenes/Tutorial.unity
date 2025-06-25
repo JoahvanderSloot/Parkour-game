@@ -22260,7 +22260,7 @@ MonoBehaviour:
   - You can slide with Ctrl and dash with Shift
   - Pressing Space twice will make you double-jump
   - You can wallrun by jumping on a wall and strafing towards it
-  - In a real game a 1 minute timer will count you down
+  - In a real game a timer will count you down
   - In the levels you will find checkpoints like these which you collect for points
   - While trying to collect as many checkpoints in the time limit a drone like this
     will chase you
@@ -50969,6 +50969,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLevel2: 0
+  drone: {fileID: 0}
   UI: {fileID: 662127750}
   tutorialText: {fileID: 908880583}
 --- !u!1001 &2130393520

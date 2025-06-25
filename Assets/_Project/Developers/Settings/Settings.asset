@@ -28,7 +28,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a481865a68ea2614c9550e4a44ef7e59, type: 3}
   CrosshairIndex: 0
   crosshairColor: {r: 1, g: 1, b: 1, a: 1}
-  Paused: 1
+  crosshairSize: 1
+  Paused: 0
   GameOver: 0
   Score: 0
   Highscore: 0

@@ -11,7 +11,8 @@ public class Settings : ScriptableObject
     [Header("Crosshair Settings")]
     public List<Sprite> Crosshairs;
     public int CrosshairIndex;
-    public Color crosshairColor;
+    public Color CrosshairColor;
+    public float CrosshairSize;
     [Header("Game Settings")]
     public bool Paused;
     public bool GameOver;
@@ -20,4 +21,5 @@ public class Settings : ScriptableObject
     public int Highscore;
     public float GameTimer;
     public int CurrentLevelIndex;
+    public bool IsLaunched;
 }

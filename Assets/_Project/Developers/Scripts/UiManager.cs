@@ -30,7 +30,8 @@ public class UiManager : MonoBehaviour
         IsTutorial = false;
         hitPoints = GameObject.FindWithTag("Player").GetComponentInParent<HitPoints>();
         crosshair.sprite = GameManager.settings.Crosshairs[GameManager.settings.CrosshairIndex];
-        crosshair.color = GameManager.settings.crosshairColor;
+        crosshair.color = GameManager.settings.CrosshairColor;
+        crosshair.gameObject.transform.localScale = new Vector3(GameManager.settings.CrosshairSize, GameManager.settings.CrosshairSize, GameManager.settings.CrosshairSize);
     }
 
     private void Update()
