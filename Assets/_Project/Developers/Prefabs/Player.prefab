@@ -798,7 +798,7 @@ MonoBehaviour:
           m_RotationOrder: 4
         animationEvents: []
       airborne:
-        clip: {fileID: -203655887218126122, guid: 11f2c79685447da48ae5dc69efff44ef, type: 3}
+        clip: {fileID: 0}
         animationSpeed: 0.3
         speedScaling: 0.2
         blendInSeconds: 0.7
