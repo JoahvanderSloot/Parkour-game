@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Settings
   m_EditorClassIdentifier: 
   Audio: 1
-  Music: 0
+  Music: 1
   Crosshairs:
   - {fileID: 21300000, guid: e03278205291cae4c81e606c3f70f1b2, type: 3}
   - {fileID: 21300000, guid: 4c7c12dd3ee424d4989c21086691e96a, type: 3}
@@ -29,7 +29,7 @@ MonoBehaviour:
   CrosshairIndex: 0
   CrosshairColor: {r: 1, g: 1, b: 1, a: 1}
   CrosshairSize: 1
-  Paused: 1
+  Paused: 0
   GameOver: 0
   Score: 0
   Highscore: 0
