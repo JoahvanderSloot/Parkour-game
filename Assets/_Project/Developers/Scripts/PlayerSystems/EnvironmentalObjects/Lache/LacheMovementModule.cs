@@ -244,6 +244,7 @@ namespace PlayerSystems.EnvironmentalObjects.Lache {
         }
 
         void JumpOffLache(ref Vector3 currentVelocity) {
+            AudioManager.Instance.Play("Jump");
             Debug.Log("JUMPPING OFF LACHE");
             DetachFromLache();
 

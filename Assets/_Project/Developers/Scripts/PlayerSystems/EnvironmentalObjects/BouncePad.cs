@@ -13,7 +13,9 @@ namespace PlayerSystems.EnvironmentalObjects {
             
             if (!other.TryGetComponent(out PlayerMovement playerMovement))
                 return;
-            
+
+            AudioManager.Instance.Play("Jump");
+
             var motor = playerMovement.GetMotor();
             motor.ForceUnground();
             motor.BaseVelocity = motor.BaseVelocity.With(y: Mathf.Max(0f, motor.BaseVelocity.y));

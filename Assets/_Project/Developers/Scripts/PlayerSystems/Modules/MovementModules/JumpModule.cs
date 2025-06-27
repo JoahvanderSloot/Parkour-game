@@ -1,5 +1,6 @@
 ﻿using ImprovedTimers;
 using PlayerSystems.Input;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace PlayerSystems.Modules.MovementModules {
@@ -115,6 +116,7 @@ namespace PlayerSystems.Modules.MovementModules {
             return;
 
             void DoJump(ref Vector3 currentVelocity, bool wasGrounded) {
+                AudioManager.Instance.Play("Jump");
                 requestedJump = false;
                 jumpBufferTimer.Stop();
 

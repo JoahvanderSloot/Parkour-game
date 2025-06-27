@@ -38,7 +38,8 @@ public class HitPoints : MonoBehaviour
         if (gameManager != null)
         {
             gameManager.settings.GameOver = true;
-            if(gameManager.settings.Score > gameManager.settings.Highscore)
+            AudioManager.Instance.Play("GameOver");
+            if (gameManager.settings.Score > gameManager.settings.Highscore)
             {
                 gameManager.settings.Highscore = gameManager.settings.Score;
             }

@@ -85,6 +85,7 @@ namespace PlayerSystems.Modules.MovementAbilityModules {
             dashing = true;
             dashTimer.Reset(dashDuration);
             dashTimer.Start();
+            AudioManager.Instance.Play("Jump");
 
             // Get the current horizontal speed
             var velocity = Player.Movement.GetState().Velocity;

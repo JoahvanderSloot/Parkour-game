@@ -1,5 +1,6 @@
 using PlayerSystems;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -49,6 +50,14 @@ public class GameManager : MonoBehaviour
             if (Keyboard.current.escapeKey.wasPressedThisFrame)
             {
                 settings.Paused = !settings.Paused;
+                if (settings.Paused)
+                {
+                    AudioManager.Instance.PauseAllSounds();
+                }
+                else
+                {
+                    AudioManager.Instance.UnPauseAllSounds();
+                }
             }
             Time.timeScale = settings.Paused ? 0 : 1;
 
@@ -101,6 +110,8 @@ public class GameManager : MonoBehaviour
 
                 if (_checkP.isPlayerInTrigger)
                 {
+                    AudioManager.Instance.StopAllSounds();
+                    AudioManager.Instance.Play("Checkpoint");
                     _checkP.isActive = false;
                     _checkP.isPlayerInTrigger = false;
                     settings.Score++;

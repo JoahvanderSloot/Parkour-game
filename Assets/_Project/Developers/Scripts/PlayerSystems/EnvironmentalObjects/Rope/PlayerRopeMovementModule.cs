@@ -150,6 +150,8 @@ namespace PlayerSystems.EnvironmentalObjects {
         }
 
         void JumpOffRope(ref Vector3 currentVelocity) {
+            AudioManager.Instance.Play("Jump");
+
             DetachFromRope();
             
             jumpRequested = false;

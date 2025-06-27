@@ -15,7 +15,8 @@ public class LevelSelector : MonoBehaviour
 
     public void NextLevel()
     {
-        if(settings.CurrentLevelIndex < levels.Count - 1)
+        AudioManager.Instance.Play("Click");
+        if (settings.CurrentLevelIndex < levels.Count - 1)
         {
             settings.CurrentLevelIndex++;
         }
@@ -28,7 +29,8 @@ public class LevelSelector : MonoBehaviour
 
     public void PreviousLevel()
     {
-        if(settings.CurrentLevelIndex >= 0)
+        AudioManager.Instance.Play("Click");
+        if (settings.CurrentLevelIndex >= 0)
         {
             settings.CurrentLevelIndex--;
         }

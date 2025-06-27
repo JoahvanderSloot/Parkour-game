@@ -95,4 +95,20 @@ public class AudioManager : MonoBehaviour
         return s.Source.isPlaying;
     }
 
+
+    public void PauseAllSounds()
+    {
+        foreach (Sound _s in Sounds)
+        {
+            _s.Source.Pause();
+        }
+    }
+
+    public void UnPauseAllSounds()
+    {
+        foreach (Sound _s in Sounds)
+        {
+            _s.Source.UnPause();
+        }
+    }
 }

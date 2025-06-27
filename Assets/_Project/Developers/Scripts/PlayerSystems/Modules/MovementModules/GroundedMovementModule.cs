@@ -63,24 +63,30 @@ namespace PlayerSystems.Modules.MovementModules {
             }
         }
 
-        void Movement(ref Vector3 currentVelocity, float deltaTime) {
+        void Movement(ref Vector3 currentVelocity, float deltaTime)
+        {
             var state = Player.Movement.GetState();
-            
+
             UpdateCameraBobState(state.Stance, state.Velocity.magnitude);
-            
+
+            // Check if the player is not grounded
+            if (!Player.Motor.GroundingStatus.IsStableOnGround)
+            {
+                AudioManager.Instance.Stop("Run");
+                return;
+            }
+
             if (state.Stance is Stance.Slide)
                 return;
-            
+
             var groundedMovement = Player.Motor.GetDirectionTangentToSurface(
                 direction: RequestedMovement,
                 surfaceNormal: Player.Motor.GroundingStatus.GroundNormal
             ) * RequestedMovement.magnitude;
-            
+
             // Calculate movement speed and response based on stance
             var speed = state.Stance is Stance.Stand ? WalkSpeed : CrouchSpeed;
             var response = state.Stance is Stance.Stand ? walkResponse : crouchResponse;
-            //speed *= 1 /*+ _stats.Speed * 0.01f*/;
-            //speed *= SpeedMultiplier;
 
             var targetVelocity = groundedMovement * speed;
             var moveVelocity = Vector3.Lerp(
@@ -89,20 +95,19 @@ namespace PlayerSystems.Modules.MovementModules {
                 t: 1f - Mathf.Exp(-response * deltaTime)
             );
 
-            // Play footstep sound based on movement speed and time passed
-            //var moveSpeed = moveVelocity.magnitude;
-            // if (moveSpeed > 0f)
-            // {
-            //     timeSinceLastFootstep += deltaTime;
-            //     if (timeSinceLastFootstep > footstepFrequency / moveSpeed)
-            //     {
-            //         timeSinceLastFootstep = 0f;
-            //         PlayFootstepSound();
-            //     }
-            // }
-
-            // Calculate acceleration TODO: Move to PlayerMovement
-            // _state.Acceleration = (moveVelocity - currentVelocity) / deltaTime;
+            // Play or stop footstep sound based on movement speed and time passed
+            var moveSpeed = moveVelocity.magnitude;
+            if (moveSpeed > 0f)
+            {
+                if (!AudioManager.Instance.IsPlaying("Run"))
+                {
+                    AudioManager.Instance.Play("Run");
+                }
+            }
+            else
+            {
+                AudioManager.Instance.Stop("Run");
+            }
 
             currentVelocity = moveVelocity;
         }

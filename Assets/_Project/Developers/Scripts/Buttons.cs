@@ -9,6 +9,7 @@ public class Buttons : MonoBehaviour
     public void PointerEnter()
     {
         transform.localScale = new Vector2(1.1f, 1.1f);
+        AudioManager.Instance.Play("Hover");
     }
 
     public void PointerExit()
@@ -18,6 +19,7 @@ public class Buttons : MonoBehaviour
 
     public void StartGame()
     {
+        AudioManager.Instance.Play("Click");
         switch (settings.CurrentLevelIndex)
         {
             case 0:
@@ -34,6 +36,7 @@ public class Buttons : MonoBehaviour
 
     public void UnPause()
     {
+        AudioManager.Instance.Play("Click");
         GameManager _gameManager = FindFirstObjectByType<GameManager>();
         if (_gameManager != null)
         {
@@ -43,11 +46,13 @@ public class Buttons : MonoBehaviour
 
     public void MainMenu()
     {
+        AudioManager.Instance.Play("Click");
         SceneManager.LoadScene("MainMenu");
     }
 
     public void SettingsMenu()
     {
+        AudioManager.Instance.Play("Click");
         SceneManager.LoadScene("Settings");
     }
 }

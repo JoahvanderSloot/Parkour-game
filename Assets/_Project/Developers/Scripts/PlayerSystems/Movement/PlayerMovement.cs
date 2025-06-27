@@ -534,5 +534,13 @@ namespace PlayerSystems.Movement {
         public void InvokeOnResetJumps() {
             OnResetJumps?.Invoke();
         }
+
+        private void Update()
+        {
+            if (!state.Grounded)
+            {
+                AudioManager.Instance.Stop("Run");
+            }
+        }
     }
 }
