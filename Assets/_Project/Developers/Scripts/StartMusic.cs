@@ -9,11 +9,21 @@ public class StartMusic : MonoBehaviour
         AudioManager.Instance.StopAllSounds();
         if (isMenu)
         {
-            AudioManager.Instance.Play("MenuSong");
+            if (!AudioManager.Instance.IsPlaying("MenuSong")) 
+            {
+                AudioManager.Instance.Play("MenuSong");
+            }
+            else
+            {
+                Debug.Log("Sus");
+            }
         }
         else
         {
-            AudioManager.Instance.Play("GameSong");
+            if (!AudioManager.Instance.IsPlaying("GameSong"))
+            {
+                AudioManager.Instance.Play("GameSong");
+            }
         }
     }
 }
