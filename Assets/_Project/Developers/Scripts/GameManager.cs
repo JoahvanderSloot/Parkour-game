@@ -110,7 +110,6 @@ public class GameManager : MonoBehaviour
 
                 if (_checkP.isPlayerInTrigger)
                 {
-                    AudioManager.Instance.StopAllSounds();
                     AudioManager.Instance.Play("Checkpoint");
                     _checkP.isActive = false;
                     _checkP.isPlayerInTrigger = false;

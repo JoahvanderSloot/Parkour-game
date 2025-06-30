@@ -41,6 +41,7 @@ public class Buttons : MonoBehaviour
         if (_gameManager != null)
         {
             _gameManager.settings.Paused = false;
+            AudioManager.Instance.UnPauseAllSounds();
         }
     }
 

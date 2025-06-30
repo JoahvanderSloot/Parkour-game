@@ -6,20 +6,20 @@ public class StartMusic : MonoBehaviour
 
     private void Start()
     {
-        AudioManager.Instance.StopAllSounds();
         if (isMenu)
         {
+            AudioManager.Instance.Stop("GameSong");
+            AudioManager.Instance.Stop("Run");
+
             if (!AudioManager.Instance.IsPlaying("MenuSong")) 
             {
                 AudioManager.Instance.Play("MenuSong");
             }
-            else
-            {
-                Debug.Log("Sus");
-            }
         }
         else
         {
+            AudioManager.Instance.Stop("MenuSong");
+
             if (!AudioManager.Instance.IsPlaying("GameSong"))
             {
                 AudioManager.Instance.Play("GameSong");
