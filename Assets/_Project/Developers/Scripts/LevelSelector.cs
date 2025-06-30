@@ -30,7 +30,7 @@ public class LevelSelector : MonoBehaviour
     public void PreviousLevel()
     {
         AudioManager.Instance.Play("Click");
-        if (settings.CurrentLevelIndex >= 0)
+        if (settings.CurrentLevelIndex > 0)
         {
             settings.CurrentLevelIndex--;
         }
