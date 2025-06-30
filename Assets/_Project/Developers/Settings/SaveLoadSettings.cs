@@ -6,6 +6,7 @@ public class SaveLoadSettings : MonoBehaviour
 {
     public Settings settings;
     [SerializeField] TextMeshProUGUI highscoreText;
+    [SerializeField] CrosshairList crosshairImages;
 
     private string SavePath => Path.Combine(Application.persistentDataPath, "playerData.json");
 
@@ -34,6 +35,13 @@ public class SaveLoadSettings : MonoBehaviour
         {
             string json = File.ReadAllText(SavePath);
             JsonUtility.FromJsonOverwrite(json, settings);
+
+            settings.Crosshairs.Clear();
+            foreach (var _crosshair in crosshairImages.CrosshairImageList)
+            {
+                settings.Crosshairs.Add(_crosshair);
+            }
+
             Debug.Log("Data loaded from " + SavePath);
         }
         else

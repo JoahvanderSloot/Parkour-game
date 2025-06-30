@@ -14,18 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Audio: 1
   Music: 1
-  Crosshairs:
-  - {fileID: 21300000, guid: e03278205291cae4c81e606c3f70f1b2, type: 3}
-  - {fileID: 21300000, guid: 4c7c12dd3ee424d4989c21086691e96a, type: 3}
-  - {fileID: 21300000, guid: 25ff1e0541229054caa5af8b4090ada5, type: 3}
-  - {fileID: 21300000, guid: 4be3869a85e166843ab84fdbf35aeed2, type: 3}
-  - {fileID: 21300000, guid: 490ea1b51b430ce46b8b608f91a2e3c1, type: 3}
-  - {fileID: 21300000, guid: d15de278084ff4344a4c13d1d50c1db0, type: 3}
-  - {fileID: 21300000, guid: 16edd573a59127a42b09ef93b3bf4587, type: 3}
-  - {fileID: 21300000, guid: 15c66da20ea7f7f469909c853e34ade9, type: 3}
-  - {fileID: 21300000, guid: a726c1bd2d54e784cb95e8bafa620cfa, type: 3}
-  - {fileID: 21300000, guid: 7b5fab9ab6167484587289fc2f43fae3, type: 3}
-  - {fileID: 21300000, guid: a481865a68ea2614c9550e4a44ef7e59, type: 3}
+  Crosshairs: []
   CrosshairIndex: 0
   CrosshairColor: {r: 1, g: 1, b: 1, a: 1}
   CrosshairSize: 1
